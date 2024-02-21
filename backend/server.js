@@ -13,7 +13,7 @@ connectDb();
 
 app.use(express.json());
 
-//app.use("/api/contacts", require("./routes/contactRoutes"));
+//eapp.use("/api/contacts", require("./routes/contactRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.all("*", (req, res) => {
   res.status(404);
