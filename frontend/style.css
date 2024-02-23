@@ -485,3 +485,11 @@ input {
   font-size: 12px;
   padding-top: 4px;
 }
+.password-error {
+  visibility: hidden;
+  transition: visiblity 0.5s;
+  text-align: center;
+  color: red;
+  font-size: 12px;
+  padding-top: 4px;
+}
