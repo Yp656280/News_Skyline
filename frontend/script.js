@@ -4,6 +4,7 @@ const signup_password = document.querySelector(".signup_password");
 const signup_submit = document.querySelector(".signup_submit");
 const email_error = document.querySelector(".email-error");
 const email_password = document.querySelector(".password-error");
+const urlStart = "http://localhost:3000/api/"
 document
   .querySelector(".img__btn")
   .addEventListener("click", async function () {
@@ -39,7 +40,7 @@ signup_submit.addEventListener("click", async function (e) {
   };
 
   const req = await fetch(
-    "http://localhost:5000/api/users/register",
+    `${urlStart}users/register`,
     requestOptions
   );
   if (req.statusText === "Bad Request") {
@@ -80,7 +81,7 @@ signin_submit.addEventListener("click", async function (e) {
   };
 
   const req = await fetch(
-    "http://localhost:5000/api/users/login",
+    `${urlStart}api/users/login`,
     requestOptions
   );
 
@@ -93,6 +94,7 @@ signin_submit.addEventListener("click", async function (e) {
     signin_email.value = signin_password.value = "";
     const token = await req.json();
     console.log(token.acessToken);
+    window.location.href = "../frontend/home.html";
 
     const requestOptions2 = {
       method: "GET", // or 'PUT', 'GET', 'DELETE', etc.
@@ -103,10 +105,10 @@ signin_submit.addEventListener("click", async function (e) {
       },
     };
     const req2 = await fetch(
-      "http://localhost:5000/api/users/current",
+      `${urlStart}/users/current`,
       requestOptions2
     );
     const data = await req2.json();
-    console.log(data);
+    //console.log("--data--",data);
   }
 });
