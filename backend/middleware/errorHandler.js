@@ -1,6 +1,4 @@
-const { json } = require("express");
 const { constants } = require("../constants");
-const { getContact } = require("../controller/contactController");
 
 const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode ? res.statusCode : 500;

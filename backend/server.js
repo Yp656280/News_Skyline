@@ -1,8 +1,7 @@
 const express = require("express");
 const errorHandler = require("./middleware/errorHandler");
 const connectDb = require("./config/dbConnection");
-// const router = express.Router();.
-const cors = require("cors"); // Import the cors middleware
+const cors = require("cors");
 
 const dotenv = require("dotenv").config();
 const port = process.env.PORT || 5000;
@@ -13,8 +12,9 @@ connectDb();
 
 app.use(express.json());
 
-//eapp.use("/api/contacts", require("./routes/contactRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/weather", require("./routes/weatherRoutes"));
+app.use("/api/news", require("./routes/newsRoutes"));
 app.all("*", (req, res) => {
   res.status(404);
   throw new Error("Route not found");
