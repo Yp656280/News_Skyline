@@ -4,7 +4,7 @@ const signup_password = document.querySelector(".signup_password");
 const signup_submit = document.querySelector(".signup_submit");
 const email_error = document.querySelector(".email-error");
 const email_password = document.querySelector(".password-error");
-const urlStart = "http://localhost:3000/api/"
+const urlStart = "http://localhost:3000/api/";
 document
   .querySelector(".img__btn")
   .addEventListener("click", async function () {
@@ -39,10 +39,7 @@ signup_submit.addEventListener("click", async function (e) {
     }), // Convert the JavaScript object to JSON string
   };
 
-  const req = await fetch(
-    `${urlStart}users/register`,
-    requestOptions
-  );
+  const req = await fetch(`${urlStart}users/register`, requestOptions);
   if (req.statusText === "Bad Request") {
     email_error.style.visibility = "visible";
 
@@ -80,10 +77,7 @@ signin_submit.addEventListener("click", async function (e) {
     }), // Convert the JavaScript object to JSON string
   };
 
-  const req = await fetch(
-    `${urlStart}api/users/login`,
-    requestOptions
-  );
+  const req = await fetch(`${urlStart}users/login`, requestOptions);
 
   if (req.statusText === "Bad Request") {
     email_error.style.visibility = "visible";
@@ -94,7 +88,6 @@ signin_submit.addEventListener("click", async function (e) {
     signin_email.value = signin_password.value = "";
     const token = await req.json();
     console.log(token.acessToken);
-    window.location.href = "../frontend/home.html";
 
     const requestOptions2 = {
       method: "GET", // or 'PUT', 'GET', 'DELETE', etc.
@@ -104,11 +97,9 @@ signin_submit.addEventListener("click", async function (e) {
         "Content-Type": "application/json", // Tell the server we are sending JSON data
       },
     };
-    const req2 = await fetch(
-      `${urlStart}/users/current`,
-      requestOptions2
-    );
+    const req2 = await fetch(`${urlStart}users/current`, requestOptions2);
     const data = await req2.json();
-    //console.log("--data--",data);
+    console.log(data, "hello");
+    window.location.href = "../frontend/home.html";
   }
 });
