@@ -60,29 +60,22 @@ const getWeatherFromCity = asyncHandler(async function (req, res) {
 });
 
 const getLocation = async (req, res) => {
-  //console.log("hello")
   try {
-    console.log('Before fetch');
-    const locationApi = await fetch('https://ipapi.co/json/');
-    console.log('After fetch');
-    
-    //if (!locationApi.ok) {
-      //throw new Error('Something Went Wrong');
-    //} else {
-      const data = await locationApi.json();
-      console.log(data);
-      res.status(201).json(data);
-    //}
+    const locationApi = await fetch("https://ipapi.co/city/");
+
+    const data = await locationApi.text();
+    res.status(201).json({ city: data });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
-const getWeatherUsingLatLng = async (req,res)=>{
-console.log()
-}
+const getWeatherUsingLatLng = async (req, res) => {
+  console.log();
+};
 module.exports = {
-  getWeatherFromCity,getLocation
+  getWeatherFromCity,
+  getLocation,
 };
 
 // // Now you can use the destructured variables as needed
