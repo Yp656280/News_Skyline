@@ -485,6 +485,14 @@ input {
   font-size: 12px;
   padding-top: 4px;
 }
+.signup-email-error {
+  visibility: hidden;
+  transition: visiblity 0.5s;
+  text-align: center;
+  color: red;
+  font-size: 12px;
+  padding-top: 4px;
+}
 .password-error {
   visibility: hidden;
   transition: visiblity 0.5s;
@@ -492,4 +500,54 @@ input {
   color: red;
   font-size: 12px;
   padding-top: 4px;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Styles for pop-up box */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+/* Styles for close button */
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.otp-submit {
+  display: visible;
+  color: black;
+}
+.phone-number {
+  display: flex;
+}
+.signup_phone {
+  margin-left: 5px;
+  /* border: solid black 1px; */
+}
+.signup_phone-code {
+  width: 50px; /* Adjust width as needed */
+  height: 30px; /* Adjust height as needed */
+  font-size: 14px; /* Adjust font size as needed */
+  /* Add any other styles as needed */
 }

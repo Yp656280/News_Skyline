@@ -8,8 +8,8 @@ const jwt = require("jsonwebtoken");
 //@acess public.
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
+  const { username, email, password, phone } = req.body;
+  if (!username || !email || !password || !phone) {
     res.status(404);
     throw new Error("all feilds are mandatory");
   }
@@ -24,11 +24,14 @@ const registerUser = asyncHandler(async (req, res) => {
     username,
     email,
     password: hashedPassword,
+    phone,
   });
 
   if (user) {
-    res.status(201).json({ _id: user.id, email: user.email });
-    console.log("user created ", user);
+    res
+      .status(201)
+      .json({ _id: user.id, email: user.email, phone: user.phone });
+    // console.log("user created ", user);
   } else {
     res.status(400);
     throw new Error("user not created");

@@ -15,6 +15,7 @@ app.use(express.json());
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/weather", require("./routes/weatherRoutes"));
 app.use("/api/news", require("./routes/newsRoutes"));
+app.use("/api/otp", require("./routes/otpRoutes"));
 app.all("*", (req, res) => {
   res.status(404);
   throw new Error("Route not found");

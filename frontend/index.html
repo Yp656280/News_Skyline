@@ -103,17 +103,33 @@
                   <span>Email</span>
                   <input class="signup_email" type="email" />
                 </label>
-                <p class="email-error">! Use another email</p>
+                <p class="signup-email-error">! Use another email</p>
                 <label>
                     <span>Password</span>
                     <input class="signup_password" type="password" />
                 </label>
+                <label>
+                  <span>Phone Number</span>
+                 <div class="phone-number">
+                   
+                   <input type="text" placeholder="+91" class="signup_phone-code"> 
+
+                   <input class="signup_phone" type="tel" />
+                 </div>
+              </label>
                 <button type="button" class="submit signup_submit">Sign Up</button>
                 
             </div>
         </div>
     </div>
-
+    <div class="overlay" id="overlay">
+      <div class="popup">
+          <!-- <span class="close-btn" onclick="closePopup()">&times;</span> -->
+          <h2>Enter OTP</h2>
+          <input type="text" id="otpInput" placeholder="Enter OTP" maxlength="6">
+          <button class="otp-submit">submit</button>
+      </div>
+   </div>
    
   </body>
 </html>

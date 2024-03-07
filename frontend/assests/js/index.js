@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
       img.width = 200;
       img.height = 150;
       img.alt = "Card image cap";
-
+      img.classList.add("custom-border-radius");
       var cardBody = document.createElement("div");
       cardBody.classList.add("card-body");
 
