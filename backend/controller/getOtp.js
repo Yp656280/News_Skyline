@@ -8,7 +8,7 @@ const asyncHandler = require("express-async-handler");
 
 const getOtp = async function (req, res) {
   try {
-    const otpResponse = await client.verify
+    const otpResponse = await client.verify.v2
       .services(TWILIO_SERVICE_SID)
       .verifications.create({
         to: `${req.params.code}${req.params.phone}`,
@@ -22,7 +22,7 @@ const getOtp = async function (req, res) {
 };
 
 const verifyOtp = async function (req, res) {
-  const verifiedResponse = await client.verify
+  const verifiedResponse = await client.verify.v2
     .services(TWILIO_SERVICE_SID)
     .verificationChecks.create({
       to: `${req.params.code}${req.params.phone}`,

@@ -1,8 +1,15 @@
 const express = require("express");
-const { getWeatherFromCity,getLocation } = require("../controller/getWeather");
+const {
+  getCurrentWeatherFromCity,
+  getLocation,
+  getCurrentWeatherFromLatLng,
+  getFutureWeatherFromCity,
+} = require("../controller/getWeather");
 const router = express.Router();
 
-router.route("/:id").get(getWeatherFromCity);
+router.route("/future/:id").get(getFutureWeatherFromCity);
+router.route("/current/:lat/:lng").get(getCurrentWeatherFromLatLng);
+router.route("/current/:id").get(getCurrentWeatherFromCity);
 router.route("/getLocation").post(getLocation);
 
 module.exports = router;

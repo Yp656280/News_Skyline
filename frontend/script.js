@@ -41,7 +41,6 @@ signup_submit.addEventListener("click", async function (e) {
   let otp;
 
   if (
-    !usernameRegex.test(username) ||
     !emailRegex.test(email) ||
     !passwordRegex.test(password) ||
     !phoneRegex.test(phone) ||
