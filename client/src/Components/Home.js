@@ -11,7 +11,7 @@ const Home = () => {
               <div>Todays Weather</div>
               <div>Current Date</div>
             </div>
-            <div class="flex-1 border-t-2 border-gray-200"></div>
+            <div className="flex-1 border-t-2 border-gray-200"></div>
             <div>
               <div>efjn wefjn ijwed weid</div>
               <div>eedjnwed iwendei dwenwe</div>
@@ -22,10 +22,10 @@ const Home = () => {
               <div>Current Weather</div>
               <div>Time</div>
             </div>
-            <div class="flex-1 border-t-2 border-gray-200"></div>
+            <div className="flex-1 border-t-2 border-gray-200"></div>
             <div className=" flex flex-row justify-between">
               <div className="basis-1/2">efjn wefjn ijwed weid</div>
-              <div class="divide-y divide-blue-200">
+              <div className="divide-y divide-blue-200">
                 <div className="flex pt-4 justify-between basis-1/2">
                   <div>Real Feel Shade</div>
                   <div>80</div>
