@@ -129,12 +129,21 @@ const Home = () => {
               <div>Current Weather</div>
               <div>{/* Time */}</div>
             </div>
+<<<<<<< HEAD
             <div className=" border-t-2 border-gray-200"></div>
             <div className="flex flex-row ">
               <div className="basis-1/2">efjn wefjn ijwed weid</div>
               <div className="divide-y divide-blue-200 flex flex-col basis-1/2 p-4">
                 <div className="flex justify-around">
                   <div>Wind</div>
+=======
+            <div className="flex-1 border-t-2 border-gray-200"></div>
+            <div className=" flex flex-row justify-between">
+              <div className="basis-1/2">efjn wefjn ijwed weid</div>
+              <div className="divide-y divide-blue-200">
+                <div className="flex pt-4 justify-between basis-1/2">
+                  <div>Real Feel Shade</div>
+>>>>>>> cde703a59651207761ca9e7e49899b251cc75414
                   <div>80</div>
                 </div>
                 <div className="flex pt-4 justify-around">
