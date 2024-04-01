@@ -59,7 +59,6 @@ export default function NewsCard() {
             <Card
               sx={{
                 maxWidth: 345,
-<<<<<<< HEAD
                 marginTop: "20px",
                 margin: "auto",
               }}
@@ -69,22 +68,12 @@ export default function NewsCard() {
                 scrollbarWidth: "none",
                 msOverflowStyle: "none",
               }}
-=======
-                height: "500px",
-                marginTop: "20px",
-                margin: "auto",
-              }}
->>>>>>> cde703a59651207761ca9e7e49899b251cc75414
               onClick={() => handleClick(item.url)}
             >
               <CardActionArea>
                 <CardMedia
                   component="img"
-<<<<<<< HEAD
                   height="140"
-=======
-                  height="50"
->>>>>>> cde703a59651207761ca9e7e49899b251cc75414
                   image={item.urlToImage}
                   alt="News Image"
                 />

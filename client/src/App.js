@@ -15,15 +15,9 @@ function App() {
     const { pathname } = location;
     console.log(pathname);
     setSearchQuery(e.target.value);
-<<<<<<< HEAD
     if (pathname.includes("/home/news")) {
       navigate(`/home/news/${e.target.value}`);
     } else if (pathname.includes("/home/weather")) {
-=======
-    if (`pathname.includes('/home/news')`) {
-      navigate(`/home/news/${e.target.value}`);
-    } else if (`pathname.includes('/home/weather')`) {
->>>>>>> cde703a59651207761ca9e7e49899b251cc75414
       navigate(`/home/weather/${e.target.value}`);
     }
   };
