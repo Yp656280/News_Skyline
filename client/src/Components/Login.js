@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import "./loginStyle.css";
+import Otp from "./otp/Otp";
 
-// document
-//   .querySelector(".img__btn")
-//   .addEventListener("click", async function () {
-//     document.querySelector(".cont").classList.toggle("s--signup");
-//   });
+function generateOTP() {
+  return Math.floor(Math.random() * 9000) + 1000;
+}
+
 const error = (type, value) => {
   if (type === "email") {
     document.querySelector(".email-error").style.visibility = `${value}`;
@@ -25,6 +26,7 @@ const error = (type, value) => {
     document.querySelector(".signup-phone-error").style.visibility = `${value}`;
   }
 };
+
 const Login = () => {
   const [transition, setTransition] = useState("");
   const [emailSignIn, setEmailSignIn] = useState("");
@@ -34,7 +36,12 @@ const Login = () => {
   const [nameSignUp, setNameSignUp] = useState("");
   const [phoneSignUp, setPhoneSignUp] = useState("");
   const [phoneCodeSignUp, setPhoneCodeSignUp] = useState("");
+  const [otpVisibility, setOtpVisibility] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [disabled, setDisabled] = useState(false);
+  const navigate = useNavigate();
 
+  // const history = useHistory();
   const toggle = () => {
     if (transition === "s--signup") {
       setTransition("");
@@ -68,7 +75,7 @@ const Login = () => {
       };
 
       const request = await fetch(
-        "http://localhost:3001/api/users/login",
+        "http://localhost:4000/api/users/login",
         requestOptions
       );
 
@@ -88,12 +95,12 @@ const Login = () => {
           },
         };
         const request2 = await fetch(
-          `http://localhost:3001/api/users/current`,
+          `http://localhost:4000/api/users/current`,
           requestOptions2
         );
         const data = await request2.json();
         console.log(data);
-        window.location.href = "../home";
+        navigate("/home");
         setEmailSignIn("");
         setPasswordSignIn("");
       }
@@ -101,12 +108,14 @@ const Login = () => {
   };
 
   const signUp = async () => {
+    console.log("in");
     const usernameRegex = /^[a-zA-Z][a-zA-Z0-9]{0,14}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^.{6,}$/;
     const phoneRegex = /^\d{10}$/;
     const codeRegex = /^\+\d{1,3}$/;
-
+    const otp1 = `${generateOTP()}`;
+    setOtp(otp1);
     if (
       !emailRegex.test(emailSignUp) ||
       !passwordRegex.test(passwordSignUp) ||
@@ -122,6 +131,10 @@ const Login = () => {
       error("signup-password", "hidden");
       error("signup-username", "hidden");
       error("signup-phone", "hidden");
+      console.log("in2", otp);
+      setOtpVisibility(true);
+      setDisabled(true);
+
       const requestOptions = {
         method: "POST", // or 'PUT', 'GET', 'DELETE', etc.
         headers: {
@@ -132,13 +145,15 @@ const Login = () => {
           email: emailSignUp,
           password: passwordSignUp,
           phone: `${phoneCodeSignUp}${phoneSignUp}`,
+          otp: otp1,
         }), // Convert the JavaScript object to JSON string
       };
 
       const req = await fetch(
-        `http://localhost:3001/api/users/register`,
+        `http://localhost:4000/api/users/register`,
         requestOptions
       );
+      console.log("in22");
       if (req.status !== 201) {
         error("signup-email", "visible");
         error("signup-password", "visible");
@@ -151,15 +166,10 @@ const Login = () => {
         error("signup-phone", "hidden");
         const user = await req.json();
         console.log(user);
-        toggle();
-        setEmailSignUp("");
-        setNameSignUp("");
-        setPasswordSignUp("");
-        setPhoneCodeSignUp("");
-        setPhoneSignUp("");
       }
     }
   };
+
   return (
     <>
       {" "}
@@ -206,12 +216,38 @@ const Login = () => {
             <div className="img__text m--in">
               <h3>If you are already a member, please log in.</h3>
             </div>
-            <div className="img__btn" onClick={() => toggle()}>
-              <span className="m--up">Sign Up</span>
+            <div
+              className="img__btn"
+              onClick={() => (disabled ? "" : toggle())}
+            >
+              <span className={`m--up`}>Sign Up</span>
               <span className="m--in">Sign In</span>
             </div>
           </div>
           <div className="form sign-up">
+            <div
+              className={
+                disabled
+                  ? "fixed top-0 left-0 w-full h-full  bg-white-200 bg-opacity-70 backdrop-blur-lg "
+                  : ""
+              }
+            >
+              {" "}
+              <Otp
+                email={emailSignUp}
+                visibility={otpVisibility}
+                setOtpVisibility={setOtpVisibility}
+                otp={otp}
+                setEmailSignUp={setEmailSignUp}
+                setNameSignUp={setNameSignUp}
+                setPasswordSignUp={setPasswordSignUp}
+                setPhoneCodeSignUp={setPhoneCodeSignUp}
+                setPhoneSignUp={setPhoneSignUp}
+                setOtp={setOtp}
+                setDisabled={setDisabled}
+              />
+            </div>
+
             <h2>Create your Account</h2>
             <label>
               <span>Name</span>
