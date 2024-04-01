@@ -19,6 +19,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "please add the phone"],
     },
+
+    isAlive: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
