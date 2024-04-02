@@ -31,7 +31,7 @@ import Weather from "./Components/Weather";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="login" element={<Login />}></Route>
+      <Route path="/" element={<Login />}></Route>
       <Route path="home" element={<App />}>
         <Route path="" element={<Home />} />
         <Route path="news/:newsSearch" element={<NewsCard />} />

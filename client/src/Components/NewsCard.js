@@ -9,6 +9,7 @@ import newsController from "../Controller/newsController";
 import Box from "@mui/material/Box";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import noImg from "../assets/No_Image_Available.jpg";
 
 export default function NewsCard() {
   const [news, setNews] = useState([]);
@@ -54,7 +55,7 @@ export default function NewsCard() {
       }}
     >
       <Grid container spacing={2} justifyContent="center" mt={2}>
-        {news.map((item, index) => (
+        {news && news.map((item, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Card
               sx={{
@@ -63,7 +64,7 @@ export default function NewsCard() {
                 margin: "auto",
               }}
               style={{
-                height: "360px",
+                height: "420px",
                 overflow: "scroll",
                 scrollbarWidth: "none",
                 msOverflowStyle: "none",
@@ -71,12 +72,13 @@ export default function NewsCard() {
               onClick={() => handleClick(item.url)}
             >
               <CardActionArea>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={item.urlToImage}
-                  alt="News Image"
-                />
+              <CardMedia
+  component="img"
+  style={{ height: "200px", objectFit: "cover" }} // Set height and objectFit here
+  image={item.urlToImage ? item.urlToImage : noImg}
+  alt="News Image"
+/>
+
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     {item.title}
