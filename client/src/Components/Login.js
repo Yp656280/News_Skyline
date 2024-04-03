@@ -98,6 +98,7 @@ const Login = () => {
           `http://localhost:4000/api/users/current`,
           requestOptions2
         );
+        localStorage.setItem("token", JSON.stringify(token.acessToken));
         const data = await request2.json();
         console.log(data);
         navigate("/home");

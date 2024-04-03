@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Header from "./Components/Header";
-import NewsCard from "./Components/NewsCard";
 import { Outlet } from "react-router";
 import Footer from "./Components/Footer";
 import { useNavigate, useLocation } from "react-router";
-//import './App.css';
-
+import "./App.css";
+import { Contexts } from "./context/contexts";
+import Login from "./Components/Login";
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
@@ -21,11 +21,23 @@ function App() {
       navigate(`/home/weather/${e.target.value}`);
     }
   };
+  const [authenticate, setAuthenticate] = useState(false);
+  const { isLoggedIn } = useContext(Contexts);
+
+  useEffect(() => {
+    setAuthenticate(isLoggedIn);
+  }, [isLoggedIn]);
   return (
     <>
-      <Header onSearchInputChange={handleSearchInputChange} />
-      <Outlet />
-      <Footer />
+      {authenticate ? (
+        <>
+          <Header onSearchInputChange={handleSearchInputChange} />
+          <Outlet />
+          <Footer />
+        </>
+      ) : (
+        <Login />
+      )}
       {/* <NewsCard  searchQuery={searchQuery}/> */}
     </>
   );

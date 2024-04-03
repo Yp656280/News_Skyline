@@ -12,6 +12,7 @@ import Login from "./Components/Login";
 import Home from "./Components/Home";
 import NewsCard from "./Components/NewsCard";
 import Weather from "./Components/Weather";
+import { ContextsProvider } from "./context/contexts";
 
 //   {
 //     path: "/login",
@@ -31,9 +32,10 @@ import Weather from "./Components/Weather";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Login />}></Route>
-      <Route path="home" element={<App />}>
-        <Route path="" element={<Home />} />
+      <Route path="/login" element={<Login />}></Route>
+      <Route path="" element={<Login />}></Route>
+      <Route path="" element={<App />}>
+        <Route path="home" element={<Home />} />
         <Route path="news/:newsSearch" element={<NewsCard />} />
         <Route path="weather/:weatherSearch" element={<Weather />} />
       </Route>
@@ -43,6 +45,8 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ContextsProvider>
+      <RouterProvider router={router} />
+    </ContextsProvider>
   </React.StrictMode>
 );
