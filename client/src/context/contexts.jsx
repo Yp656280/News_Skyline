@@ -6,7 +6,7 @@ export const Contexts = createContext({
 
 export function ContextsProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [token, setToken] = useState();
+  // const [token, setToken] = useState();
   useEffect(() => {
     const check = async () => {
       const token = localStorage.getItem("token");

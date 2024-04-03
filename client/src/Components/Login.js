@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "./loginStyle.css";
 import Otp from "./otp/Otp";
+import { Contexts } from "../context/contexts";
 
 function generateOTP() {
   return Math.floor(Math.random() * 9000) + 1000;
@@ -40,7 +41,7 @@ const Login = () => {
   const [otp, setOtp] = useState("");
   const [disabled, setDisabled] = useState(false);
   const navigate = useNavigate();
-
+  const { setIsLoggedIn } = useContext(Contexts);
   // const history = useHistory();
   const toggle = () => {
     if (transition === "s--signup") {
@@ -101,6 +102,7 @@ const Login = () => {
         localStorage.setItem("token", JSON.stringify(token.acessToken));
         const data = await request2.json();
         console.log(data);
+        setIsLoggedIn(true);
         navigate("/home");
         setEmailSignIn("");
         setPasswordSignIn("");
