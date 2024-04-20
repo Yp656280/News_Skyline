@@ -1,4 +1,4 @@
-import  React,{useState} from "react";
+import React, { useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -56,22 +56,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Entairtainment", "Politics", "Science"];
 
 function Header({ onSearchInputChange }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [searchQuery, setsearchQuery] = useState('')
-
+  const [searchQuery, setsearchQuery] = useState("");
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-  
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
 
   return (
     <AppBar position="static">

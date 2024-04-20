@@ -15,10 +15,10 @@ function App() {
     const { pathname } = location;
     console.log(pathname);
     setSearchQuery(e.target.value);
-    if (pathname.includes("/news")) {
-      navigate(`/news/${e.target.value}`);
-    } else if (pathname.includes("/weather")) {
-      navigate(`/weather/${e.target.value}`);
+    if (pathname.includes("/home/news")) {
+      navigate(`/home/news/${e.target.value}`);
+    } else if (pathname.includes("/home/weather")) {
+      navigate(`/home/weather/${e.target.value}`);
     }
   };
   const [authenticate, setAuthenticate] = useState(false);
@@ -29,7 +29,7 @@ function App() {
   }, [isLoggedIn]);
   return (
     <>
-      {authenticate ? (
+      {true ? (
         <>
           <Header onSearchInputChange={handleSearchInputChange} />
           <Outlet />

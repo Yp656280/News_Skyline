@@ -8,7 +8,6 @@ import { CardActionArea, Skeleton } from "@mui/material";
 import newsController from "../Controller/newsController";
 import Box from "@mui/material/Box";
 import { useParams } from "react-router-dom";
-
 import noImg from "../assets/No_Image_Available.jpg";
 
 export default function NewsCard() {
@@ -59,7 +58,7 @@ export default function NewsCard() {
       <Grid container spacing={2} justifyContent="center" mt={2}>
         {loading ? (
           <>
-            {[1, 2, 3,4,5,6,7,8,9].map((index) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card sx={{ maxWidth: 345, margin: "auto" }}>
                   <Skeleton

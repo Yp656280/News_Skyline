@@ -36,8 +36,8 @@ const router = createBrowserRouter(
       <Route path="" element={<Login />}></Route>
       <Route path="" element={<App />}>
         <Route path="home" element={<Home />} />
-        <Route path="news/:newsSearch" element={<NewsCard />} />
-        <Route path="weather/:weatherSearch" element={<Weather />} />
+        <Route path="home/news/:newsSearch" element={<NewsCard />} />
+        <Route path="/home/weather/:weatherSearch" element={<Weather />} />
       </Route>
     </>
   )
