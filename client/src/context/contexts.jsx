@@ -4,16 +4,26 @@ import {
   GetFutureWeather,
   GetCurrentLocation,
 } from "../Controller/weatherController";
+
 export const Contexts = createContext({
   isLoggedIn: false,
   setIsLoggedIn: () => {},
   currentWeather: "",
   setCurrentWeather: (todo) => {},
+  futureWeather: "",
+  setFutureWeather: () => {},
+  allWeather: "",
+  setAllWeather: () => {},
+  activeWeather: "",
+  setActiveWeather: () => {},
 });
 
 export function ContextsProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentWeather, setCurrentWeather] = useState("");
+  const [futureWeather, setFutureWeather] = useState("");
+  const [allWeather, setAllWeather] = useState([]);
+  const [activeWeather, setActiveWeather] = useState([]);
 
   useEffect(() => {
     const check = async () => {
@@ -55,13 +65,26 @@ export function ContextsProvider({ children }) {
       setCurrentWeather(currentWeatherData);
       // console.log(currentWeatherData);
       const futureWeatherData = await GetFutureWeather(currentLocation.city);
+      setFutureWeather(futureWeatherData);
       // console.log(futureWeatherData);
     };
     loadData();
   }, []);
+
   return (
     <Contexts.Provider
-      value={{ isLoggedIn, setIsLoggedIn, setCurrentWeather, currentWeather }}
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        setCurrentWeather,
+        currentWeather,
+        futureWeather,
+        setFutureWeather,
+        allWeather,
+        setAllWeather,
+        activeWeather,
+        setActiveWeather,
+      }}
     >
       {children}
     </Contexts.Provider>

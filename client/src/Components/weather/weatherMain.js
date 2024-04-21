@@ -1,12 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Contexts } from "../../context/contexts";
 import { nanoid } from "nanoid";
-
-import {
-  GetCurrentWeather,
-  GetFutureWeather,
-  GetCurrentLocation,
-} from "../../Controller/weatherController";
 import Box from "@mui/material/Box";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -16,11 +10,90 @@ import thermometer from "../../assets/images/thermometer.png";
 import wind from "../../assets/images/wind.png";
 import sun from "../../assets/images/sun.png";
 import watrerDroplet from "../../assets/images/water droplet.png";
+import sunny_icon from "../../assets/images/hourly/sunny_icon.png";
+import partly_cloudy_icon from "../../assets/images/hourly/partly_cloudy_icon.png";
+import cloudy_icon from "../../assets/images/hourly/cloudy_icon.png";
+import overcast_icon from "../../assets/images/hourly/overcast_icon.png";
+import mist_icon from "../../assets/images/hourly/mist_icon.png";
+import rain_icon from "../../assets/images/hourly/rain_icon.png";
+import snow_icon from "../../assets/images/hourly/snow_icon.png";
+import sleet_icon from "../../assets/images/hourly/sleet_icon.png";
+import drizzle_icon from "../../assets/images/hourly/drizzle_icon.png";
+import thunderstorm_icon from "../../assets/images/hourly/thunderstorm_icon.png";
+import blowing_snow_icon from "../../assets/images/hourly/blowing_snow_icon.png";
+import blizzard_icon from "../../assets/images/hourly/blizzard_icon.png";
+import fog_icon from "../../assets/images/hourly/fog_icon.png";
+import ice_pellets_icon from "../../assets/images/hourly/ice_pellets_icon.png";
+import night_icon from "../../assets/images/hourly/moon_icon.png";
 function WeatherMain() {
+  const iconMapping = {
+    1000: sunny_icon,
+    1003: partly_cloudy_icon,
+    1006: cloudy_icon,
+    1009: overcast_icon,
+    1030: mist_icon,
+    1063: cloudy_icon, // Merged patchy rain possible
+    1066: snow_icon, // Merged patchy snow possible
+    1069: sleet_icon, // Merged patchy sleet possible
+    1072: drizzle_icon, // Merged patchy freezing drizzle possible
+    1087: thunderstorm_icon, // Thundery outbreaks possible
+    1114: blowing_snow_icon,
+    1117: blizzard_icon,
+    1135: fog_icon, // Merged freezing fog
+    1150: drizzle_icon, // Merged patchy light drizzle
+    1153: drizzle_icon, // Light drizzle
+    1168: drizzle_icon, // Freezing drizzle
+    1171: drizzle_icon, // Heavy freezing drizzle
+    1180: rain_icon, // Merged patchy light rain
+    1183: rain_icon, // Light rain
+    1186: rain_icon, // Moderate rain at times
+    1189: rain_icon, // Moderate rain
+    1192: rain_icon, // Heavy rain at times
+    1195: rain_icon, // Heavy rain
+    1198: sleet_icon, // Light freezing rain
+    1201: sleet_icon, // Moderate or heavy freezing rain
+    1210: snow_icon, // Merged patchy light snow
+    1213: snow_icon, // Light snow
+    1216: snow_icon, // Patchy moderate snow
+    1219: snow_icon, // Moderate snow
+    1222: snow_icon, // Patchy heavy snow
+    1225: snow_icon, // Heavy snow
+    1237: ice_pellets_icon,
+    1240: rain_icon, // Merged light rain shower
+    1243: rain_icon, // Moderate or heavy rain shower
+    1246: rain_icon, // Torrential rain shower
+    1249: sleet_icon, // Merged light sleet showers
+    1252: sleet_icon, // Moderate or heavy sleet showers
+    1255: snow_icon, // Merged light snow showers
+    1258: snow_icon, // Moderate or heavy snow showers
+    1261: ice_pellets_icon, // Merged light showers of ice pellets
+    1264: ice_pellets_icon, // Moderate or heavy showers of ice pellets
+    1273: thunderstorm_icon, // Merged patchy light rain with thunder
+    1276: thunderstorm_icon, // Moderate or heavy rain with thunder
+    1279: thunderstorm_icon, // Merged patchy light snow with thunder
+    1282: thunderstorm_icon, // Moderate or heavy snow with thunder
+  };
+  const currentHour = new Date().getHours();
   const weatherData = {};
   const x = [1, 2, 3, 4, 5, 6, 7];
-  const { currentWeather } = useContext(Contexts);
-
+  const { currentWeather, futureWeather } = useContext(Contexts);
+  console.log(futureWeather);
+  const displayIcon = (conditionCode, hour) => {
+    let icon;
+    if (hour > 17) {
+      icon = night_icon;
+    } else {
+      icon = iconMapping[conditionCode];
+    }
+    if (icon) {
+      // Display icon
+      return icon;
+      // Here you can set the source of an image tag or do whatever you need to display the icon
+    } else {
+      // Handle unknown condition code
+      console.log("No icon found for condition code:", conditionCode);
+    }
+  };
   return (
     <>
       <Box
@@ -83,7 +156,7 @@ function WeatherMain() {
                 marginTop: "",
               }}
             >
-              {currentWeather.locationName}
+              {currentWeather?.locationName}
             </Box>
             <Box
               sx={{
@@ -93,7 +166,8 @@ function WeatherMain() {
                 marginTop: "-30px",
               }}
             >
-              Chance of rain:0%
+              Chance of rain:
+              {futureWeather?.forecast?.forecastday[0].hour[12].chance_of_rain}%
             </Box>
             <Box
               sx={{
@@ -103,7 +177,7 @@ function WeatherMain() {
                 marginTop: "20px",
               }}
             >
-              31°
+              {futureWeather?.current?.temp_c}°
             </Box>
           </Box>
           <Box
@@ -117,9 +191,9 @@ function WeatherMain() {
         </Box>
         <Box
           sx={{
-            height: "25%",
+            height: "28%",
             width: "98%",
-            marginTop: "10px",
+            marginTop: "20px",
             // border: "solid black 1px",
             backgroundColor: "rgb(234, 236, 239) ",
             borderRadius: "25px",
@@ -127,12 +201,14 @@ function WeatherMain() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            padding: "10px",
+            paddingRight: "20px",
           }}
         >
           <Box
             sx={{
               width: "100%",
-              height: "15%",
+              height: "13%",
               paddingLeft: "20px",
               paddingTop: "10px",
             }}
@@ -142,46 +218,60 @@ function WeatherMain() {
           <Box
             sx={{
               width: "100%",
-              height: "85%",
+              height: "78%",
               display: "flex",
               overflow: "scroll",
               padding: "10px",
               scrollbarWidth: "none",
-
+              // border: "solid black 1px",
               msOverflowStyle: "none",
             }}
           >
-            {weatherData?.forecast?.forecastday[0].hour.map((hours, index) => (
-              <div
-                className="whitespace-nowrap p-4"
-                style={{ height: "100px", width: "100px" }}
-                key={nanoid()}
-              >
-                <h2>
-                  {parseInt(hours.time.substring(11, 13)) > 12
-                    ? `${parseInt(hours.time.substring(11, 13)) - 12}pm`
-                    : `${hours.time.substring(11, 13)}am`}
-                </h2>
-                <img
-                  src={hours.condition.icon}
-                  className="aspect-square"
+            {futureWeather?.forecast?.forecastday[0].hour.map(
+              (hours, index) => (
+                <div
+                  className="whitespace-nowrap p-4"
                   style={{
-                    height: "3rem",
-                    width: "10rem",
-                    objectFit: "cover", // Add this to ensure both height and width increase
+                    height: "100%",
+                    minWidth: "120px",
+                    // border: "solid black 1px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
-                />
-                <h1>{hours.temp_c}°</h1>
-              </div>
-            ))}
+                  key={nanoid()}
+                >
+                  <h2>
+                    {parseInt(hours.time.substring(11, 13)) > 12
+                      ? `${parseInt(hours.time.substring(11, 13)) - 12}pm`
+                      : `${hours.time.substring(11, 13)}am`}
+                  </h2>
+                  <img
+                    src={displayIcon(
+                      hours.condition.code,
+                      hours.time.substring(11, 13)
+                    )}
+                    className="aspect-square"
+                    style={{
+                      height: "40%",
+                      width: "62%",
+                      margin: "10px",
+                      // objectFit: "cover", // Add this to ensure both height and width increase
+                    }}
+                  />
+                  <h1>{hours?.temp_c}°</h1>
+                </div>
+              )
+            )}
           </Box>
         </Box>
 
         <Box
           sx={{
-            height: "28%",
+            height: "31%",
             width: "98%",
-            marginTop: "10px",
+            marginTop: "25px",
             // border: "solid red 1px",
             display: "flex",
             flexDirection: "column",
@@ -211,6 +301,10 @@ function WeatherMain() {
                 justifyContent: "space-between",
                 flexDirection: "column",
                 alignItems: "space-between",
+                fontWeight: "600",
+                fontSize: "20px",
+                padding: "10px",
+                marginTop: "-10px",
               }}
             >
               Air Conditions
@@ -222,10 +316,12 @@ function WeatherMain() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              width: "100%",
+              width: "98%",
               height: "83.5%",
               // border: "solid red 1px",
               padding: "10px",
+              paddingLeft: "20px",
+              borderRadius: "25px",
             }}
           >
             <Box
@@ -235,15 +331,15 @@ function WeatherMain() {
                 alignItems: "center",
                 width: "100%",
                 height: "100%",
-                // border: "solid yellow 1px",
+                // border: "solid black 1px",
                 flexDirection: "column",
               }}
             >
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "",
-                  alignItems: "center",
+                  justifyContent: "top",
+                  alignItems: "left",
                   width: "100%",
                   height: "100%",
                   // border: "solid red 1px",
@@ -255,19 +351,42 @@ function WeatherMain() {
                     display: "flex",
                     justifyContent: "left",
                     width: "100%",
+                    // border: "solid red 1px",
+                    display: "flex",
+                    justifyContent: "",
+                    alignItems: "center",
+                    paddingLeft: "15px",
+                    fontWeight: "500",
+                    fontSize: "18px",
                   }}
                 >
                   {" "}
-                  <img src={thermometer} className="h-8 w-8" alt="" />
+                  <img
+                    src={thermometer}
+                    style={{ marginRight: "2%" }}
+                    className="h-8 w-8"
+                    alt=""
+                  />
                   Real Feel
                 </Box>
-                <Box sx={{ fontSize: "30px" }}>30C</Box>
+                <Box
+                  sx={{
+                    fontSize: "40px",
+                    // border: "solid red 1px",
+                    paddingLeft: "15%",
+                    fontWeight: "500",
+                    paddingTop: "10px",
+                  }}
+                >
+                  {futureWeather?.current?.feelslike_c}°c
+                </Box>
               </Box>
+              {/* chances of rain */}
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  justifyContent: "top",
+                  alignItems: "left",
                   width: "100%",
                   height: "100%",
                   // border: "solid red 1px",
@@ -279,13 +398,40 @@ function WeatherMain() {
                     display: "flex",
                     justifyContent: "left",
                     width: "100%",
+                    // border: "solid red 1px",
+                    display: "flex",
+                    justifyContent: "",
+                    alignItems: "center",
+                    paddingLeft: "14px",
+                    fontWeight: "500",
+                    fontSize: "18px",
                   }}
                 >
                   {" "}
-                  <img src={watrerDroplet} className="h-8 w-8" alt="" />
+                  <img
+                    src={watrerDroplet}
+                    style={{ marginRight: "2%" }}
+                    className="h-8 w-8"
+                    alt=""
+                  />
                   Chances of Rain
                 </Box>
-                <Box sx={{ fontSize: "30px" }}>30C</Box>{" "}
+                <Box
+                  sx={{
+                    fontSize: "30px",
+                    // border: "solid red 1px",
+                    fontSize: "40px",
+                    paddingLeft: "15%",
+                    fontWeight: "500",
+                    paddingTop: "10px",
+                  }}
+                >
+                  {
+                    futureWeather?.forecast?.forecastday[0].hour[12]
+                      .chance_of_rain
+                  }
+                  %
+                </Box>{" "}
               </Box>
             </Box>
             <Box
@@ -302,8 +448,8 @@ function WeatherMain() {
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  justifyContent: "top",
+                  alignItems: "left",
                   width: "100%",
                   height: "100%",
                   // border: "solid red 1px",
@@ -315,19 +461,42 @@ function WeatherMain() {
                     display: "flex",
                     justifyContent: "left",
                     width: "100%",
+                    // border: "solid red 1px",
+                    display: "flex",
+                    justifyContent: "",
+                    alignItems: "center",
+                    paddingLeft: "14px",
+                    fontWeight: "500",
+                    fontSize: "18px",
                   }}
                 >
                   {" "}
-                  <img src={wind} className="h-8 w-8" alt="" />
-                  Chances of Rain
+                  <img
+                    src={wind}
+                    style={{ marginRight: "2%" }}
+                    className="h-8 w-8"
+                    alt=""
+                  />
+                  Wind Speed
                 </Box>
-                <Box sx={{ fontSize: "30px" }}>30C</Box>{" "}
+                <Box
+                  sx={{
+                    fontSize: "30px",
+                    // border: "solid red 1px",
+                    fontSize: "40px",
+                    paddingLeft: "15%",
+                    fontWeight: "500",
+                    paddingTop: "10px",
+                  }}
+                >
+                  {futureWeather?.current?.wind_kph} kp/h
+                </Box>{" "}
               </Box>
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  justifyContent: "top",
+                  alignItems: "left",
                   width: "100%",
                   height: "100%",
                   // border: "solid red 1px",
@@ -339,13 +508,36 @@ function WeatherMain() {
                     display: "flex",
                     justifyContent: "left",
                     width: "100%",
+                    // border: "solid red 1px",
+                    display: "flex",
+                    justifyContent: "",
+                    alignItems: "center",
+                    paddingLeft: "14px",
+                    fontWeight: "500",
+                    fontSize: "18px",
                   }}
                 >
                   {" "}
-                  <img src={sun} className="h-8 w-8" alt="" />
-                  Chances of Rain
+                  <img
+                    src={sun}
+                    style={{ marginRight: "2%" }}
+                    className="h-8 w-8"
+                    alt=""
+                  />
+                  UV index
                 </Box>
-                <Box sx={{ fontSize: "30px" }}>30C</Box>{" "}
+                <Box
+                  sx={{
+                    fontSize: "30px",
+                    // border: "solid red 1px",
+                    fontSize: "40px",
+                    paddingLeft: "15%",
+                    fontWeight: "500",
+                    paddingTop: "10px",
+                  }}
+                >
+                  {currentHour > 18 ? "0" : `${futureWeather?.current?.uv}`}
+                </Box>{" "}
               </Box>
             </Box>
           </Box>
@@ -364,12 +556,13 @@ function WeatherMain() {
           sx={{
             // border: "solid orange 1px",
             height: "90%",
-            width: "80%",
+            width: "90%",
             marginTop: "11%",
             borderRadius: "25px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            backgroundColor: "rgb(234, 236, 239)",
           }}
         >
           <Box
@@ -378,10 +571,12 @@ function WeatherMain() {
               // height: "90%",
               width: "80%",
               marginTop: "5%",
+              fontWeight: "600",
+              fontSize: "20px",
               // borderRadius: "25px",
             }}
           >
-            7 Day Forecast
+            Hourly Wind & Humidity{" "}
           </Box>
           <Box
             sx={{
@@ -389,32 +584,78 @@ function WeatherMain() {
               height: "90%",
               width: "95%",
               marginTop: "2%",
-              // borderRadius: "25px",
+              borderRadius: "25px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "space-evenly",
+              overflow: "scroll",
+              scrollbarWidth: "none",
+
+              msOverflowStyle: "none",
+              paddingTop: "10px",
             }}
           >
-            {x.map((cur) => {
+            {futureWeather?.forecast?.forecastday[0]?.hour?.map((cur) => {
               return (
                 <Box
                   sx={{
                     // border: "solid orange 1px",
-                    height: "13%",
-                    width: "85%",
+                    minHeight: "10vh",
+                    width: "88%",
                     // marginTop: "11%",
-                    // borderRadius: "25px",
+                    borderRadius: "15px",
+                    padding: "10px",
+                    paddingLeft: "7%",
+                    paddingRight: "7%",
                     display: "flex",
                     // flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "space-between",
+                    margin: "10px",
+                    background: "white",
+                    fontWeight: "500",
                   }}
                   key={nanoid()}
                 >
-                  <Box>Today</Box>
-                  <Box>Sunny</Box>
-                  <Box>36/21</Box>
+                  <Box sx={{ fontWeight: "500" }}>
+                    {cur?.time.slice(-5, -3) > 12
+                      ? Number(cur?.time.slice(-5, -3)) - 12
+                      : cur?.time.slice(-5, -3) - 0}
+                    {Number(cur?.time.slice(11, 13)) >= 12 ? " pm" : " am"}
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box sx={{ fontWeight: "500" }}>Humidity</Box>
+                    <Box sx={{ fontWeight: "500" }}>{cur?.humidity}💧</Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box sx={{ fontWeight: "500" }}>Wind speed</Box>
+                    <Box
+                      sx={{
+                        fontWeight: "500",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {cur?.wind_kph}{" "}
+                      <img src={blowing_snow_icon} style={{ height: "20px" }} />{" "}
+                    </Box>
+                  </Box>
                 </Box>
               );
             })}

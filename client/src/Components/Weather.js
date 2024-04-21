@@ -24,7 +24,7 @@ const Weather = () => {
     setDisplay(<WeatherMap weatherData={weatherData} />);
   };
   return (
-    <Box sx={{ width: "98.5vw", height: "100vh", display: "flex" }}>
+    <Box sx={{ width: "98.5vw", height: "120vh", display: "flex" }}>
       <Box
         sx={{
           // border: "solid black 1px",
