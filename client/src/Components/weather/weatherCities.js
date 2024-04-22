@@ -111,7 +111,7 @@ function WeatherCities() {
   const [search, setSearch] = useState("");
   const { allWeather, setAllWeather, activeWeather, setActiveWeather } =
     useContext(Contexts);
-
+  const [active, setActive] = useState(false);
   const searchWeather = async (city) => {
     setSearch("");
     const data = await GetFutureWeather(city);
@@ -121,6 +121,7 @@ function WeatherCities() {
     setSelectedDiv(index);
     console.log(cur);
     setActiveWeather(cur);
+    setActive(true);
   };
   return (
     <>
@@ -187,6 +188,7 @@ function WeatherCities() {
           }}
         >
           {allWeather.map((cur, index) => {
+            console.log(cur);
             return (
               <Box
                 sx={{
@@ -210,9 +212,33 @@ function WeatherCities() {
                     // border: "solid black 1px",
 
                     height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    width: "25%",
                   }}
                 >
-                  <img src={sunIcon} className=" h-full" alt="" />
+                  <img
+                    src={displayIcon(cur.current.condition.code)}
+                    style={{ height: "75%" }}
+                    alt=""
+                  />
+                  <Box
+                    sx={{
+                      fontSize: "2vh",
+                      fontWeight: "500",
+                      height: "",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "end",
+
+                      // border: "solid black 1px",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    {cur.current.condition.text}
+                  </Box>
                 </Box>
                 <Box
                   sx={{
@@ -251,10 +277,14 @@ function WeatherCities() {
         <Box
           sx={{
             width: "100%",
+
             // border: "solid blue 1px",
             display: "flex",
             justifyContent: "left",
             alignItems: "top",
+            minHeight: "27%",
+            visibility: active ? "visible" : "hidden",
+            marginTop: "-15px",
           }}
         >
           <Box
@@ -299,39 +329,41 @@ function WeatherCities() {
             >
               {activeWeather?.forecast?.forecastday[0].hour.map(
                 (hours, index) => (
-                  <div
-                    className="whitespace-nowrap p-4"
-                    style={{
-                      height: "100%",
-                      minWidth: "120px",
-                      // border: "solid black 1px",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    key={nanoid()}
-                  >
-                    <h2>
-                      {parseInt(hours.time.substring(11, 13)) > 12
-                        ? `${parseInt(hours.time.substring(11, 13)) - 12} pm`
-                        : `${hours.time.substring(11, 13) - 0} am`}
-                    </h2>
-                    <img
-                      src={displayIcon(
-                        hours.condition.code,
-                        hours.time.substring(11, 13)
-                      )}
-                      className="aspect-square"
+                  <>
+                    <div
+                      className="whitespace-nowrap p-4"
                       style={{
-                        height: "40%",
-                        width: "62%",
-                        margin: "10px",
-                        // objectFit: "cover", // Add this to ensure both height and width increase
+                        height: "100%",
+                        minWidth: "120px",
+                        // border: "solid black 1px",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
-                    />
-                    <h1>{hours?.temp_c}°</h1>
-                  </div>
+                      key={nanoid()}
+                    >
+                      <h2>
+                        {parseInt(hours.time.substring(11, 13)) > 12
+                          ? `${parseInt(hours.time.substring(11, 13)) - 12} pm`
+                          : `${hours.time.substring(11, 13) - 0} am`}
+                      </h2>
+                      <img
+                        src={displayIcon(
+                          hours.condition.code,
+                          hours.time.substring(11, 13)
+                        )}
+                        className="aspect-square"
+                        style={{
+                          height: "40%",
+                          width: "62%",
+                          margin: "10px",
+                          // objectFit: "cover", // Add this to ensure both height and width increase
+                        }}
+                      />
+                      <h1>{hours?.temp_c}°</h1>
+                    </div>{" "}
+                  </>
                 )
               )}
             </Box>
@@ -347,6 +379,7 @@ function WeatherCities() {
           alignItems: "center",
           flexDirection: "column",
           paddingRight: "2%",
+          visibility: active ? "visible" : "hidden",
         }}
       >
         <Box
@@ -393,11 +426,17 @@ function WeatherCities() {
               height: "100%",
               width: "50%",
               display: "flex",
-              flexDirection: "center",
+              alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <img src={sunIcon} alt="" />
+            <img
+              src={displayIcon(activeWeather?.current?.condition?.code)}
+              alt=""
+              style={{
+                height: "80%",
+              }}
+            />
           </Box>
         </Box>
         <Box
@@ -435,7 +474,7 @@ function WeatherCities() {
                 alignItems: "center",
               }}
             >
-              <Box sx={{ fontWeight: "500" }}>6Am</Box>
+              <Box sx={{ fontWeight: "500", fontSize: "80%" }}>6Am</Box>
               <Box sx={{ height: "33.33%" }}>
                 <img
                   src={sunIcon}
@@ -443,13 +482,24 @@ function WeatherCities() {
                   alt=""
                 />
               </Box>
-              <Box sx={{ fontWeight: "500", fontSize: "100%" }}>
+              <Box sx={{ fontWeight: "500", fontSize: "80%" }}>
                 {activeWeather?.forecast?.forecastday[0]?.hour[6]?.temp_c.toFixed(
                   0
                 )}
                 °c
               </Box>
             </Box>
+            <div
+              style={{
+                position: "",
+                right: "-1", // Adjust position as needed
+                top: "0",
+                bottom: "0",
+                width: "1px",
+                borderLeft: "1px solid rgb(180, 180, 180)",
+                height: "70%",
+              }}
+            ></div>
             <Box
               sx={{
                 // border: "solid black 1px",
@@ -461,7 +511,7 @@ function WeatherCities() {
                 alignItems: "center",
               }}
             >
-              <Box sx={{ fontWeight: "500" }}>12Pm</Box>
+              <Box sx={{ fontWeight: "500", fontSize: "80%" }}>12Pm</Box>
               <Box sx={{ fontWeight: "500", height: "33.33%" }}>
                 <img
                   src={sunIcon}
@@ -469,14 +519,25 @@ function WeatherCities() {
                   alt=""
                 />
               </Box>
-              <Box sx={{ fontWeight: "500", fontSize: "100%" }}>
+              <Box sx={{ fontWeight: "500", fontSize: "80%" }}>
                 {" "}
                 {activeWeather?.forecast?.forecastday[0]?.hour[12]?.temp_c?.toFixed(
                   0
                 )}
                 °c
               </Box>
-            </Box>
+            </Box>{" "}
+            <div
+              style={{
+                position: "",
+                right: "-1", // Adjust position as needed
+                top: "0",
+                bottom: "0",
+                width: "1px",
+                borderLeft: "1px solid rgb(180, 180, 180)",
+                height: "70%",
+              }}
+            ></div>
             <Box
               sx={{
                 // border: "solid black 1px",
@@ -488,7 +549,7 @@ function WeatherCities() {
                 alignItems: "center",
               }}
             >
-              <Box sx={{ fontWeight: "500" }}>6Pm</Box>
+              <Box sx={{ fontWeight: "500", fontSize: "80%" }}>6Pm</Box>
               <Box sx={{ height: "33.33%" }}>
                 <img
                   src={sunIcon}
@@ -496,7 +557,7 @@ function WeatherCities() {
                   alt=""
                 />
               </Box>
-              <Box sx={{ fontWeight: "500", fontSize: "100%" }}>
+              <Box sx={{ fontWeight: "500", fontSize: "80%" }}>
                 {" "}
                 {activeWeather?.forecast?.forecastday[0]?.hour[18]?.temp_c?.toFixed(
                   0

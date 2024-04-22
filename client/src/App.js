@@ -30,7 +30,7 @@ function App() {
   }, [isLoggedIn]);
   return (
     <>
-      {true ? (
+      {authenticate ? (
         <>
           <Header onSearchInputChange={handleSearchInputChange} />
           <Outlet />
