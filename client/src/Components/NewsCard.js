@@ -32,12 +32,14 @@ export default function NewsCard() {
   useEffect(() => {
     setLoading(true);
     async function fetchData(target) {
-      console.log("news search", newsSearch);
+      console.log("news search", newsSearch == "/");
       let data;
-      if (newsSearch && newsSearch.length > 0) {
+      if (newsSearch.length > 0) {
+        console.log("hii");
         data = await getNews(newsSearch);
       } else {
-        data = await getNews();
+        console.log("hii 2");
+        data = await getNews("Indore");
       }
 
       setNews(data.articles);

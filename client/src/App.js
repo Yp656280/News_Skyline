@@ -7,16 +7,17 @@ import "./App.css";
 import { Contexts } from "./context/contexts";
 import Login from "./Components/Login";
 function App() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("Indore");
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleSearchInputChange = (e) => {
     const { pathname } = location;
     console.log(pathname);
-    setSearchQuery(e.target.value);
+
+    setSearchQuery(e.target.value || "Indore");
     if (pathname.includes("/home/news")) {
-      navigate(`/home/news/${e.target.value}`);
+      navigate(`/home/news/${e.target.value || "Indore"}`);
     } else if (pathname.includes("/home/weather")) {
       navigate(`/home/weather/${e.target.value}`);
     }
