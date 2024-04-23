@@ -4,6 +4,7 @@ import {
   GetFutureWeather,
   GetCurrentLocation,
 } from "../Controller/weatherController";
+import { useParams } from "react-router-dom";
 
 export const Contexts = createContext({
   isLoggedIn: false,
@@ -16,6 +17,7 @@ export const Contexts = createContext({
   setAllWeather: () => {},
   activeWeather: "",
   setActiveWeather: () => {},
+  weatherSearch: "",
 });
 
 export function ContextsProvider({ children }) {
@@ -24,6 +26,7 @@ export function ContextsProvider({ children }) {
   const [futureWeather, setFutureWeather] = useState("");
   const [allWeather, setAllWeather] = useState([]);
   const [activeWeather, setActiveWeather] = useState([]);
+  const { weatherSearch } = useParams();
 
   useEffect(() => {
     const check = async () => {
@@ -58,9 +61,13 @@ export function ContextsProvider({ children }) {
   }, []);
 
   useEffect(() => {
+    console.log("test",weatherSearch)
     const loadData = async () => {
+     
       const currentLocation = await GetCurrentLocation();
       // console.log(currentLocation);
+     
+
       const currentWeatherData = await GetCurrentWeather(currentLocation.city);
       setCurrentWeather(currentWeatherData);
       // console.log(currentWeatherData);

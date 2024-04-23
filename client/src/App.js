@@ -7,19 +7,24 @@ import "./App.css";
 import { Contexts } from "./context/contexts";
 import Login from "./Components/Login";
 function App() {
-  const [searchQuery, setSearchQuery] = useState("Indore");
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleSearchInputChange = (e) => {
     const { pathname } = location;
-    console.log(pathname);
+    setSearchQuery(e.target.value);
+    console.log(e.target.value==="");
+    if(e.target.value===""){
+      setSearchQuery("Indore")
+    }
 
-    setSearchQuery(e.target.value || "Indore");
+
+    
     if (pathname.includes("/home/news")) {
-      navigate(`/home/news/${e.target.value || "Indore"}`);
+      navigate(`/home/news/${e.target.value ===""?"indore":e.target.value}`);
     } else if (pathname.includes("/home/weather")) {
-      navigate(`/home/weather/${e.target.value}`);
+      navigate(`/home/weather/${e.target.value ===""?"indore":e.target.value}`);
     }
   };
   const [authenticate, setAuthenticate] = useState(false);

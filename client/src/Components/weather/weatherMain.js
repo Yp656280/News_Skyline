@@ -25,7 +25,9 @@ import blizzard_icon from "../../assets/images/hourly/blizzard_icon.png";
 import fog_icon from "../../assets/images/hourly/fog_icon.png";
 import ice_pellets_icon from "../../assets/images/hourly/ice_pellets_icon.png";
 import night_icon from "../../assets/images/hourly/moon_icon.png";
+import { useParams } from "react-router-dom";
 function WeatherMain() {
+  const { weatherSearch } = useParams();
   const iconMapping = {
     1000: sunny_icon,
     1003: partly_cloudy_icon,
