@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { styled, alpha, createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  styled,
+  alpha,
+  createTheme,
+  ThemeProvider,
+} from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,7 +17,7 @@ import InputBase from "@mui/material/InputBase";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/new Logo.png";
 
 const theme = createTheme({
   palette: {
@@ -87,7 +92,6 @@ function Header({ onSearchInputChange }) {
       <StyledAppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            
             <Typography
               variant="h6"
               noWrap
@@ -103,7 +107,11 @@ function Header({ onSearchInputChange }) {
                 textDecoration: "none",
               }}
             >
-              <img src={logo} alt="logo" style={{ height: "4rem", width: "10rem" }} />
+              <img
+                src={logo}
+                alt="logo"
+                style={{ height: "4rem", width: "10rem" }}
+              />
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -137,7 +145,12 @@ function Header({ onSearchInputChange }) {
               >
                 {pages.map((page) => (
                   <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                    <Typography variant="body1" textAlign="center" component="a" href={page.link}>
+                    <Typography
+                      variant="body1"
+                      textAlign="center"
+                      component="a"
+                      href={page.link}
+                    >
                       {page.name}
                     </Typography>
                   </MenuItem>

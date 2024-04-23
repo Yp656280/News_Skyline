@@ -82,7 +82,7 @@ function WeatherCities() {
   };
   const displayIcon = (conditionCode, hour) => {
     let icon;
-    if (hour > 17) {
+    if (hour > 18) {
       if (conditionCode === 1000) {
         icon = night_icon;
       } else {
@@ -474,10 +474,14 @@ function WeatherCities() {
                 alignItems: "center",
               }}
             >
+              {console.log()}
               <Box sx={{ fontWeight: "500", fontSize: "80%" }}>6Am</Box>
               <Box sx={{ height: "33.33%" }}>
                 <img
-                  src={sunIcon}
+                  src={displayIcon(
+                    activeWeather?.forecast?.forecastday[0]?.hour[6]?.condition
+                      ?.code
+                  )}
                   style={{ width: "100%", height: "100%" }}
                   alt=""
                 />
@@ -514,7 +518,10 @@ function WeatherCities() {
               <Box sx={{ fontWeight: "500", fontSize: "80%" }}>12Pm</Box>
               <Box sx={{ fontWeight: "500", height: "33.33%" }}>
                 <img
-                  src={sunIcon}
+                  src={displayIcon(
+                    activeWeather?.forecast?.forecastday[0]?.hour[12]?.condition
+                      ?.code
+                  )}
                   style={{ width: "100%", height: "100%" }}
                   alt=""
                 />
@@ -552,7 +559,10 @@ function WeatherCities() {
               <Box sx={{ fontWeight: "500", fontSize: "80%" }}>6Pm</Box>
               <Box sx={{ height: "33.33%" }}>
                 <img
-                  src={sunIcon}
+                  src={displayIcon(
+                    activeWeather?.forecast?.forecastday[0]?.hour[18]?.condition
+                      ?.code
+                  )}
                   style={{ width: "100%", height: "100%" }}
                   alt=""
                 />
@@ -622,19 +632,25 @@ function WeatherCities() {
                   marginLeft: "-10px",
                 }}
               >
-                {" "}
                 <img
-                  src={sunIcon}
-                  style={{ width: "70%", height: "80%" }}
+                  src={displayIcon(
+                    activeWeather?.forecast?.forecastday[0]?.hour[15]?.condition
+                      .code,
+                    15
+                  )}
+                  style={{ width: "70%", height: "80%", marginRight: "10px" }}
                   alt=""
                 />
-                Sunny
+                {
+                  activeWeather?.forecast?.forecastday[0]?.hour[15]?.condition
+                    .text
+                }
               </Box>{" "}
-              {activeWeather?.forecast?.forecastday[0]?.hour[15]?.temp_c?.toFixed(
+              {activeWeather?.forecast?.forecastday[0]?.hour[1]?.temp_c?.toFixed(
                 0
               )}
               /
-              {activeWeather?.forecast?.forecastday[0]?.hour[5]?.temp_c?.toFixed(
+              {activeWeather?.forecast?.forecastday[0]?.hour[15]?.temp_c?.toFixed(
                 0
               )}
             </Box>
@@ -665,11 +681,18 @@ function WeatherCities() {
               >
                 {" "}
                 <img
-                  src={sunIcon}
-                  style={{ width: "70%", height: "80%" }}
+                  src={displayIcon(
+                    activeWeather?.forecast?.forecastday[1]?.hour[15]?.condition
+                      ?.code,
+                    15
+                  )}
+                  style={{ width: "70%", height: "80%", marginRight: "10px" }}
                   alt=""
                 />
-                Sunny
+                {
+                  activeWeather?.forecast?.forecastday[1]?.hour[15]?.condition
+                    ?.text
+                }
               </Box>{" "}
               {activeWeather?.forecast?.forecastday[1]?.hour[15]?.temp_c?.toFixed(
                 0
@@ -706,11 +729,18 @@ function WeatherCities() {
               >
                 {" "}
                 <img
-                  src={sunIcon}
-                  style={{ width: "70%", height: "80%" }}
+                  src={displayIcon(
+                    activeWeather?.forecast?.forecastday[2]?.hour[15]?.condition
+                      ?.code,
+                    15
+                  )}
+                  style={{ width: "70%", height: "80%", marginRight: "10px" }}
                   alt=""
                 />
-                Sunny
+                {
+                  activeWeather?.forecast?.forecastday[2]?.hour[15]?.condition
+                    ?.text
+                }
               </Box>{" "}
               {activeWeather?.forecast?.forecastday[2]?.hour[15]?.temp_c?.toFixed(
                 0

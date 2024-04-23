@@ -79,7 +79,7 @@ function WeatherMain() {
   const weatherData = {};
   const x = [1, 2, 3, 4, 5, 6, 7];
   const { currentWeather, futureWeather } = useContext(Contexts);
-  console.log(futureWeather);
+  // console.log(futureWeather);
   const displayIcon = (conditionCode, hour) => {
     let icon;
     if (hour > 17) {
@@ -188,7 +188,10 @@ function WeatherMain() {
               width: "30%",
             }}
           >
-            <img src={sunIcon} alt="" />
+            <img
+              src={displayIcon(currentWeather?.conditionCode, currentHour)}
+              alt=""
+            />
           </Box>
         </Box>
         <Box
@@ -213,6 +216,8 @@ function WeatherMain() {
               height: "13%",
               paddingLeft: "20px",
               paddingTop: "10px",
+              fontSize: "3vh",
+              fontWeight: "500",
             }}
           >
             Today's Forecast
@@ -241,13 +246,15 @@ function WeatherMain() {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
+                    fontWeight: "500",
+                    fontSize: "2.5vh",
                   }}
                   key={nanoid()}
                 >
-                  <h2>
+                  <h2 style={{ fontSize: "2.5vh" }}>
                     {parseInt(hours.time.substring(11, 13)) > 12
-                      ? `${parseInt(hours.time.substring(11, 13)) - 12}pm`
-                      : `${hours.time.substring(11, 13)}am`}
+                      ? `${parseInt(hours.time.substring(11, 13)) - 12} pm`
+                      : `${hours.time.substring(11, 13) - 0} am`}
                   </h2>
                   <img
                     src={displayIcon(
@@ -538,7 +545,9 @@ function WeatherMain() {
                     paddingTop: "10px",
                   }}
                 >
-                  {currentHour > 18 ? "0" : `${futureWeather?.current?.uv}`}
+                  {currentHour > 18 && currentHour < 6
+                    ? "0"
+                    : `${futureWeather?.current?.uv}`}
                 </Box>{" "}
               </Box>
             </Box>
@@ -645,7 +654,9 @@ function WeatherMain() {
                       alignItems: "center",
                     }}
                   >
-                    <Box sx={{ fontWeight: "500" }}>Wind speed</Box>
+                    <Box sx={{ fontWeight: "500", minWidth: "100px" }}>
+                      Wind Speed
+                    </Box>
                     <Box
                       sx={{
                         fontWeight: "500",
@@ -654,8 +665,11 @@ function WeatherMain() {
                         alignItems: "center",
                       }}
                     >
-                      {cur?.wind_kph}{" "}
-                      <img src={blowing_snow_icon} style={{ height: "20px" }} />{" "}
+                      {cur?.wind_kph} kp/h{" "}
+                      <img
+                        src={blowing_snow_icon}
+                        style={{ height: "18px", paddingLeft: "5px" }}
+                      />{" "}
                     </Box>
                   </Box>
                 </Box>
