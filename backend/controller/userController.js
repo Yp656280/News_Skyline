@@ -39,13 +39,14 @@ const mailSender = async (req, res, email, otp) => {
 //Register User
 const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password, phone, otp } = req.body;
-  if (!username || !email || !password || !phone || !otp) {
+  if (!username || !email || !password || !phone) {
     res.status(404);
     throw new Error("all feilds are mandatory");
   }
-  const userAvailable = await User.findOne({ email: email });
+  const userAvailable = await User.findOne({ email });
   if (userAvailable) {
     res.status(400);
+    console.log("400");
     throw new Error("user already registerd");
   }
   try {
@@ -94,7 +95,7 @@ const loginUser = asyncHandler(async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "25m" }
+      { expiresIn: "50m" }
     );
 
     res.status(200).json({ acessToken });

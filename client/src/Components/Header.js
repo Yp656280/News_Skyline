@@ -18,6 +18,8 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../assets/new Logo.png";
+import logout from "../assets/power-on.png";
+import { useNavigate } from "react-router";
 
 const theme = createTheme({
   palette: {
@@ -75,7 +77,57 @@ const pages = [
   { name: "News", link: "/home/news/indore" },
   { name: "Weather", link: "/home/weather/indore" },
 ];
+const navigationStyle = {
+  width: "9%",
+  backgroundColor: "transparent",
+  // border: "solid white 1px",
+  display: "flex",
+  justifyContent: "right",
+  alignItems: "center",
+};
 
+const imgStyle = {
+  width: "25px",
+  borderRadius: "50px",
+  float: "left",
+};
+
+const logoutStyle = {
+  fontSize: "0.8em",
+  fontFamily: "'Oswald', sans-serif",
+  position: "relative",
+  right: "-18px",
+  bottom: "-4px",
+  overflow: "hidden",
+  letterSpacing: "3px",
+  opacity: 0,
+  transition: "opacity 0.45s",
+  WebkitTransition: "opacity 0.35s",
+  // border: "solid white 1px",
+};
+
+const buttonStyle = {
+  textDecoration: "none",
+  float: "right",
+  padding: "12px",
+  // margin: "15px",
+  color: "white",
+  width: "50px",
+  backgroundColor: "transparent",
+  transition: "width 0.35s",
+  WebkitTransition: "width 0.35s",
+  overflow: "hidden",
+  // border: "solid white 1px",
+  maxHeight: "50px",
+};
+
+const buttonHoverStyle = {
+  width: "130px",
+};
+
+const logoutHoverStyle = {
+  opacity: 0.9,
+};
 function Header({ onSearchInputChange }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
@@ -87,6 +139,12 @@ function Header({ onSearchInputChange }) {
     setAnchorElNav(null);
   };
 
+  const handleLogout = () => {
+    navigate("/login");
+    localStorage.clear();
+  };
+
+  const navigate = useNavigate();
   return (
     <ThemeProvider theme={theme}>
       <StyledAppBar position="static">
@@ -180,6 +238,29 @@ function Header({ onSearchInputChange }) {
                 onChange={onSearchInputChange}
               />
             </Search>
+            <div style={navigationStyle}>
+              <a
+                className="button"
+                onClick={handleLogout}
+                href="#"
+                style={buttonStyle}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.width = buttonHoverStyle.width;
+                  e.currentTarget.querySelector(".logout").style.opacity =
+                    logoutHoverStyle.opacity;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.width = buttonStyle.width;
+                  e.currentTarget.querySelector(".logout").style.opacity =
+                    logoutStyle.opacity;
+                }}
+              >
+                <img src={logout} alt="Profile" style={imgStyle} />
+                <div className="logout" style={logoutStyle}>
+                  LOGOUT
+                </div>
+              </a>
+            </div>
           </Toolbar>
         </Container>
       </StyledAppBar>

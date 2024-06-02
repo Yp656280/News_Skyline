@@ -208,6 +208,8 @@ function WeatherMain() {
             alignItems: "center",
             padding: "10px",
             paddingRight: "20px",
+            boxShadow:
+              "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
           }}
         >
           <Box
@@ -225,7 +227,7 @@ function WeatherMain() {
           <Box
             sx={{
               width: "100%",
-              height: "78%",
+              height: "79%",
               display: "flex",
               overflow: "scroll",
               padding: "10px",
@@ -239,8 +241,8 @@ function WeatherMain() {
                 <div
                   className="whitespace-nowrap p-4"
                   style={{
-                    height: "100%",
-                    minWidth: "120px",
+                    height: "92%",
+                    minWidth: "100px",
                     // border: "solid black 1px",
                     display: "flex",
                     flexDirection: "column",
@@ -248,6 +250,12 @@ function WeatherMain() {
                     alignItems: "center",
                     fontWeight: "500",
                     fontSize: "2.5vh",
+                    boxShadow:
+                      "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
+                    backgroundColor: "white",
+                    marginRight: "10px",
+                    marginTop: "12px",
+                    borderRadius: "15px",
                   }}
                   key={nanoid()}
                 >
@@ -269,7 +277,7 @@ function WeatherMain() {
                       // objectFit: "cover", // Add this to ensure both height and width increase
                     }}
                   />
-                  <h1>{hours?.temp_c}°</h1>
+                  <h1>{hours?.temp_c}°C</h1>
                 </div>
               )
             )}
@@ -288,6 +296,8 @@ function WeatherMain() {
             alignItems: "center",
             backgroundColor: "rgb(234, 236, 239) ",
             borderRadius: "25px",
+            boxShadow:
+              "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
             // padding: "10px",
           }}
         >
@@ -574,6 +584,8 @@ function WeatherMain() {
             flexDirection: "column",
             alignItems: "center",
             backgroundColor: "rgb(234, 236, 239)",
+            boxShadow:
+              "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
           }}
         >
           <Box
@@ -626,6 +638,8 @@ function WeatherMain() {
                     margin: "10px",
                     background: "white",
                     fontWeight: "500",
+                    boxShadow:
+                      "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
                   }}
                   key={nanoid()}
                 >

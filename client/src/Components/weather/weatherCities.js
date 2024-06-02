@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import Box from "@mui/material/Box";
 import { Contexts } from "../../context/contexts";
-
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
@@ -16,7 +15,6 @@ import wind from "../../assets/images/wind.png";
 import sun from "../../assets/images/sun.png";
 import watrerDroplet from "../../assets/images/water droplet.png";
 import { nanoid } from "nanoid";
-
 import sunny_icon from "../../assets/images/hourly/sunny_icon.png";
 import partly_cloudy_icon from "../../assets/images/hourly/partly_cloudy_icon.png";
 import cloudy_icon from "../../assets/images/hourly/cloudy_icon.png";
@@ -112,10 +110,13 @@ function WeatherCities() {
   const { allWeather, setAllWeather, activeWeather, setActiveWeather } =
     useContext(Contexts);
   const [active, setActive] = useState(false);
-  const searchWeather = async (city) => {
+  const searchWeather = (e, city) => {
+    e.preventDefault();
     setSearch("");
-    const data = await GetFutureWeather(city);
-    setAllWeather([...allWeather, data]);
+    const data = GetFutureWeather(city).then((data) => {
+      if (allWeather) setAllWeather([...allWeather, data]);
+      else setAllWeather([data]);
+    });
   };
   const handleClick = (index, cur) => {
     setSelectedDiv(index);
@@ -143,12 +144,15 @@ function WeatherCities() {
             width: "98%",
             marginTop: "20px",
             // border: "solid black 1px",
+            boxShadow:
+              "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
+            borderRadius: "1rem",
           }}
         >
           <form
             action=""
             style={{ height: "100%" }}
-            onSubmit={(e) => searchWeather(search)}
+            onSubmit={(e) => searchWeather(e, search)}
           >
             <input
               type="text"
@@ -188,7 +192,7 @@ function WeatherCities() {
           }}
         >
           {allWeather.map((cur, index) => {
-            console.log(cur);
+            // console.log(cur);
             return (
               <Box
                 sx={{
@@ -204,6 +208,9 @@ function WeatherCities() {
                   backgroundColor:
                     selectedDiv === index ? "white" : "rgb(234, 236, 239)",
                   border: selectedDiv === index ? "solid blue 1px" : "none",
+                  boxShadow:
+                    "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
+                  marginBottom: "20px",
                 }}
                 onClick={() => handleClick(index, cur)}
               >
@@ -221,7 +228,7 @@ function WeatherCities() {
                 >
                   <img
                     src={displayIcon(cur.current.condition.code)}
-                    style={{ height: "75%" }}
+                    style={{ height: "60%" }}
                     alt=""
                   />
                   <Box
@@ -277,11 +284,12 @@ function WeatherCities() {
         <Box
           sx={{
             width: "100%",
-
+            maxHeight: "10%",
             // border: "solid blue 1px",
             display: "flex",
             justifyContent: "left",
-            alignItems: "top",
+            // alignItems: "space-between",
+            alignItems: "center",
             minHeight: "27%",
             visibility: active ? "visible" : "hidden",
             marginTop: "-15px",
@@ -293,6 +301,7 @@ function WeatherCities() {
               width: "98%",
               // marginTop: "10px",
               // border: "solid black 1px",
+
               backgroundColor: "rgb(234, 236, 239) ",
               borderRadius: "25px",
               display: "flex",
@@ -301,6 +310,8 @@ function WeatherCities() {
               alignItems: "center",
               padding: "10px",
               paddingRight: "30px",
+              boxShadow:
+                " rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
             }}
           >
             <Box
@@ -311,6 +322,7 @@ function WeatherCities() {
                 paddingTop: "5px",
                 fontWeight: "500",
                 fontSize: "25px",
+                marginBottom: "10px",
               }}
             >
               Today's Forecast
@@ -333,13 +345,18 @@ function WeatherCities() {
                     <div
                       className="whitespace-nowrap p-4"
                       style={{
-                        height: "100%",
-                        minWidth: "120px",
+                        height: "85%",
+                        minWidth: "100px",
                         // border: "solid black 1px",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
                         alignItems: "center",
+                        backgroundColor: "white",
+                        marginRight: "15px",
+                        borderRadius: "20px",
+                        boxShadow:
+                          " rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
                       }}
                       key={nanoid()}
                     >
@@ -355,13 +372,13 @@ function WeatherCities() {
                         )}
                         className="aspect-square"
                         style={{
-                          height: "40%",
-                          width: "62%",
+                          height: "30%",
+                          // width: "62%",
                           margin: "10px",
                           // objectFit: "cover", // Add this to ensure both height and width increase
                         }}
                       />
-                      <h1>{hours?.temp_c}°</h1>
+                      <h1>{hours?.temp_c}°C</h1>
                     </div>{" "}
                   </>
                 )
@@ -391,6 +408,8 @@ function WeatherCities() {
             marginTop: "9%",
             backgroundColor: "rgb(234, 236, 239)",
             borderRadius: "25px",
+            boxShadow:
+              "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
           }}
         >
           <Box
@@ -434,7 +453,7 @@ function WeatherCities() {
               src={displayIcon(activeWeather?.current?.condition?.code)}
               alt=""
               style={{
-                height: "80%",
+                height: "75%",
               }}
             />
           </Box>
@@ -450,6 +469,8 @@ function WeatherCities() {
             paddingTop: "3%",
             fontSize: "25px",
             fontWeight: "500",
+            boxShadow:
+              "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
           }}
         >
           Today's 6 Hour Forecast
@@ -592,6 +613,8 @@ function WeatherCities() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-evenly",
+            boxShadow:
+              "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
           }}
         >
           3 Day Forecast
@@ -641,10 +664,13 @@ function WeatherCities() {
                   style={{ width: "70%", height: "80%", marginRight: "10px" }}
                   alt=""
                 />
-                {
-                  activeWeather?.forecast?.forecastday[0]?.hour[15]?.condition
-                    .text
-                }
+                <div className=" text-sm text-nowrap font-semibold">
+                  {" "}
+                  {
+                    activeWeather?.forecast?.forecastday[0]?.hour[15]?.condition
+                      .text
+                  }
+                </div>
               </Box>{" "}
               {activeWeather?.forecast?.forecastday[0]?.hour[1]?.temp_c?.toFixed(
                 0
@@ -689,10 +715,13 @@ function WeatherCities() {
                   style={{ width: "70%", height: "80%", marginRight: "10px" }}
                   alt=""
                 />
-                {
-                  activeWeather?.forecast?.forecastday[1]?.hour[15]?.condition
-                    ?.text
-                }
+                <div className=" text-sm text-nowrap font-semibold">
+                  {" "}
+                  {
+                    activeWeather?.forecast?.forecastday[1]?.hour[15]?.condition
+                      ?.text
+                  }
+                </div>
               </Box>{" "}
               {activeWeather?.forecast?.forecastday[1]?.hour[15]?.temp_c?.toFixed(
                 0
@@ -737,10 +766,13 @@ function WeatherCities() {
                   style={{ width: "70%", height: "80%", marginRight: "10px" }}
                   alt=""
                 />
-                {
-                  activeWeather?.forecast?.forecastday[2]?.hour[15]?.condition
-                    ?.text
-                }
+                <div className=" text-sm text-nowrap font-semibold">
+                  {" "}
+                  {
+                    activeWeather?.forecast?.forecastday[2]?.hour[15]?.condition
+                      ?.text
+                  }
+                </div>
               </Box>{" "}
               {activeWeather?.forecast?.forecastday[2]?.hour[15]?.temp_c?.toFixed(
                 0

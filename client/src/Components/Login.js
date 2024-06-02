@@ -52,6 +52,7 @@ const Login = () => {
   };
 
   const signIN = async () => {
+    console.log("signin");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^.{6,}$/;
 
@@ -172,6 +173,16 @@ const Login = () => {
       }
     }
   };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    signUp();
+  };
+  const handleSubmitSignIn = (event) => {
+    event.preventDefault();
+
+    signIN();
+  };
 
   return (
     <>
@@ -179,141 +190,146 @@ const Login = () => {
       <br />
       <br />
       <div className={`cont ${transition}`}>
-        <div className="form sign-in">
-          <h2>Welcome</h2>
-          <label>
-            <span>Email</span>
-            <input
-              className="signin_email"
-              type="email"
-              value={emailSignIn}
-              onChange={(event) => setEmailSignIn(event.target.value)}
-            />
-          </label>
-          <p className="email-error">please check the email !</p>
-          <label>
-            <span>Password</span>
-            <input
-              className="signin_password"
-              type="password"
-              value={passwordSignIn}
-              onChange={(event) => setPasswordSignIn(event.target.value)}
-            />
-          </label>
-          <p className="password-error">please check the password !</p>
-
-          <p className="forgot-pass"></p>
-          <button
-            type="button"
-            className="submit signin_submit"
-            onClick={() => signIN()}
-          >
-            Sign In
-          </button>
-        </div>
-        <div className="sub-cont">
-          <div className="img">
-            <div className="img__text m--up">
-              <h3>Don't have an account? Please Sign up!</h3>
-            </div>
-            <div className="img__text m--in">
-              <h3>If you are already a member, please log in.</h3>
-            </div>
-            <div
-              className="img__btn"
-              onClick={() => (disabled ? "" : toggle())}
-            >
-              <span className={`m--up`}>Sign Up</span>
-              <span className="m--in">Sign In</span>
-            </div>
-          </div>
-          <div className="form sign-up">
-            <div
-              className={
-                disabled
-                  ? "fixed top-0 left-0 w-full h-full  bg-white-200 bg-opacity-70 backdrop-blur-lg "
-                  : ""
-              }
-            >
-              {" "}
-              <Otp
-                email={emailSignUp}
-                visibility={otpVisibility}
-                setOtpVisibility={setOtpVisibility}
-                otp={otp}
-                setEmailSignUp={setEmailSignUp}
-                setNameSignUp={setNameSignUp}
-                setPasswordSignUp={setPasswordSignUp}
-                setPhoneCodeSignUp={setPhoneCodeSignUp}
-                setPhoneSignUp={setPhoneSignUp}
-                setOtp={setOtp}
-                setDisabled={setDisabled}
-              />
-            </div>
-
-            <h2>Create your Account</h2>
-            <label>
-              <span>Name</span>
-              <input
-                className="signup_name"
-                type="text"
-                value={nameSignUp}
-                onChange={(event) => setNameSignUp(event.target.value)}
-              />
-            </label>
-            <p className="signup-username-error">! Use another name</p>
-
+        {" "}
+        <form onSubmit={handleSubmitSignIn}>
+          <div className="form sign-in">
+            <h2>Welcome</h2>
             <label>
               <span>Email</span>
               <input
-                className="signup_email"
+                className="signin_email"
                 type="email"
-                value={emailSignUp}
-                onChange={(event) => setEmailSignUp(event.target.value)}
+                value={emailSignIn}
+                onChange={(event) => setEmailSignIn(event.target.value)}
               />
             </label>
-            <p className="signup-email-error">! Use another email</p>
+            <p className="email-error">please check the email !</p>
             <label>
               <span>Password</span>
               <input
-                className="signup_password"
+                className="signin_password"
                 type="password"
-                value={passwordSignUp}
-                onChange={(event) => setPasswordSignUp(event.target.value)}
+                value={passwordSignIn}
+                onChange={(event) => setPasswordSignIn(event.target.value)}
               />
             </label>
-            <p className="signup-password-error">! Use another password</p>
+            <p className="password-error">please check the password !</p>
 
-            <label>
-              <span>Phone Number</span>
-              <div className="phone-number">
-                <input
-                  type="text"
-                  placeholder="+91"
-                  value={phoneCodeSignUp}
-                  className="signup_phone-code"
-                  onChange={(event) => setPhoneCodeSignUp(event.target.value)}
-                />
-
-                <input
-                  className="signup_phone"
-                  type="tel"
-                  value={phoneSignUp}
-                  onChange={(event) => setPhoneSignUp(event.target.value)}
-                />
-              </div>
-            </label>
-            <p className="signup-phone-error">! Use another phone</p>
-
+            <p className="forgot-pass"></p>
             <button
-              type="button"
-              className="submit signup_submit"
-              onClick={() => signUp()}
+              type="submit"
+              className="submit signin_submit"
+              onSubmit={() => signIN()}
             >
-              Sign Up
+              Sign In
             </button>
           </div>
-        </div>
+        </form>
+        <form onSubmit={handleSubmit}>
+          <div className="sub-cont">
+            <div className="img">
+              <div className="img__text m--up">
+                <h3>Don't have an account? Please Sign up!</h3>
+              </div>
+              <div className="img__text m--in">
+                <h3>If you are already a member, please log in.</h3>
+              </div>
+              <div
+                className="img__btn"
+                onClick={() => (disabled ? "" : toggle())}
+              >
+                <span className={`m--up`}>Sign Up</span>
+                <span className="m--in">Sign In</span>
+              </div>
+            </div>
+            <div className="form sign-up">
+              <div
+                className={
+                  disabled
+                    ? "fixed top-0 left-0 w-full h-full  bg-white-200 bg-opacity-70 backdrop-blur-lg "
+                    : ""
+                }
+              >
+                {" "}
+                <Otp
+                  email={emailSignUp}
+                  visibility={otpVisibility}
+                  setOtpVisibility={setOtpVisibility}
+                  otp={otp}
+                  setEmailSignUp={setEmailSignUp}
+                  setNameSignUp={setNameSignUp}
+                  setPasswordSignUp={setPasswordSignUp}
+                  setPhoneCodeSignUp={setPhoneCodeSignUp}
+                  setPhoneSignUp={setPhoneSignUp}
+                  setOtp={setOtp}
+                  setDisabled={setDisabled}
+                />
+              </div>
+
+              <h2>Create your Account</h2>
+              <label>
+                <span>Name</span>
+                <input
+                  className="signup_name"
+                  type="text"
+                  value={nameSignUp}
+                  onChange={(event) => setNameSignUp(event.target.value)}
+                />
+              </label>
+              <p className="signup-username-error">! Use another name</p>
+
+              <label>
+                <span>Email</span>
+                <input
+                  className="signup_email"
+                  type="email"
+                  value={emailSignUp}
+                  onChange={(event) => setEmailSignUp(event.target.value)}
+                />
+              </label>
+              <p className="signup-email-error">! Use another email</p>
+              <label>
+                <span>Password</span>
+                <input
+                  className="signup_password"
+                  type="password"
+                  value={passwordSignUp}
+                  onChange={(event) => setPasswordSignUp(event.target.value)}
+                />
+              </label>
+              <p className="signup-password-error">! Use another password</p>
+
+              <label>
+                <span>Phone Number</span>
+                <div className="phone-number">
+                  <input
+                    type="text"
+                    placeholder="+91"
+                    value={phoneCodeSignUp}
+                    className="signup_phone-code"
+                    onChange={(event) => setPhoneCodeSignUp(event.target.value)}
+                  />
+
+                  <input
+                    className="signup_phone"
+                    type="tel"
+                    value={phoneSignUp}
+                    onChange={(event) => setPhoneSignUp(event.target.value)}
+                  />
+                </div>
+              </label>
+              <p className="signup-phone-error">! Use another phone</p>
+
+              <button
+                type="submit"
+                className="submit signup_submit"
+                onSubmit={() => signUp()}
+              >
+                Sign Up
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </>
   );

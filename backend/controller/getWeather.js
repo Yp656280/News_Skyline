@@ -104,7 +104,7 @@ const getCurrentWeatherFromCity = asyncHandler(async function (req, res) {
 //fetching the current data from lat and lng
 const getCurrentWeatherFromLatLng = async (req, res) => {
   const weatherApi = await fetch(
-    `https://api.weatherapi.com/v1/current.json?key=994f16fde2644d26a0874326240903&q=${req.params.lat},${req.params.lng}`
+    `https://api.weatherapi.com/v1/current.json?key=7ad97723551b4dc6b21111018240106&q=${req.params.lat},${req.params.lng}`
   );
   if (!weatherApi.ok) {
     res.status(404);
