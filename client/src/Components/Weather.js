@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -9,11 +9,22 @@ import mapIcon from "../assets/images/mapIcon.png";
 import WeatherMain from "./weather/weatherMain";
 import WeatherCities from "./weather/weatherCities";
 import WeatherMap from "./weather/weatherMap";
+import { Navigate,useNavigate } from "react-router-dom";
+const token = localStorage.getItem("token");
+
 const Weather = () => {
   const [weatherData, setWeatherData] = useState("");
+  const navigate = useNavigate();
   const [display, setDisplay] = useState(
     <WeatherMain weatherData={weatherData} />
   );
+
+  useEffect(()=>{
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+  },[token])
   const weatherHome = () => {
     setDisplay(<WeatherMain weatherData={weatherData} />);
   };

@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea, Skeleton } from "@mui/material";
 import newsController from "../Controller/newsController";
 import Box from "@mui/material/Box";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams,useNavigate } from "react-router-dom";
 import noImg from "../assets/No_Image_Available.jpg";
 import LeftHeader from './NewsLeftComponent'
 
@@ -16,6 +16,8 @@ export default function NewsCard() {
   const { newsSearch } = useParams();
   const [loading, setLoading] = useState(true);
   const [selectedHeadline, setSelectedHeadline] = useState(null);
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   const [headlines, setHeadlines] = useState([
     "India",
     "World",
@@ -61,6 +63,10 @@ export default function NewsCard() {
   };
 
   useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     setLoading(true);
     async function fetchData(target) {
       console.log("news search", newsSearch);
@@ -78,7 +84,7 @@ const filteredArticles = data.articles.filter(article => article.title !== "[Rem
       setLoading(false);
     }
     fetchData();
-  }, [newsSearch]);
+  }, [newsSearch,token]);
 
   return (
     <>

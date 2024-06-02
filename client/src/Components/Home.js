@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { Box, Paper, Pagination, Skeleton, Divider } from "@mui/material";
 import moment from "moment";
 import WaterDropOutlinedIcon from "@mui/icons-material/WaterDropOutlined";
@@ -24,6 +24,9 @@ import fog_icon from "../assets/images/hourly/fog_icon.png";
 import ice_pellets_icon from "../assets/images/hourly/ice_pellets_icon.png";
 import night_icon from "../assets/images/hourly/moon_icon.png";
 import { nanoid } from "nanoid";
+import { Contexts } from "../context/contexts";
+import { Navigate, useNavigate } from "react-router-dom";
+
 
 import { GetNews } from "../Controller/newsController";
 import {
@@ -31,6 +34,7 @@ import {
   GetFutureWeather,
   GetCurrentLocation,
 } from "../Controller/weatherController";
+import Login from "./Login";
 
 const Home = () => {
   const iconMapping = {
@@ -114,6 +118,10 @@ const Home = () => {
   const [currentDate, setCurrentDate] = useState("");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [authenticate, setAuthenticate] = useState(true);
+  const { isLoggedIn } = useContext(Contexts);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const handleDivClick = (url) => {
     window.open(url, "_blank");
@@ -126,7 +134,14 @@ const Home = () => {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
+
   useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+
     async function fetchData() {
       try {
         setLoading(true);
@@ -152,9 +167,11 @@ const Home = () => {
     }
 
     fetchData();
-  }, []);
+  }, [token]);
   console.log(currentWeather, futureWeather);
   return (
+    <>
+ 
     <div className="bg-slate-200">
       <div className="flex justify-evenly flex-wrap mx-4 mb-4">
         <Box className="basis-3/5">
@@ -569,6 +586,8 @@ const Home = () => {
         </div>
       </div>
     </div>
+    </>
+    
   );
 };
 

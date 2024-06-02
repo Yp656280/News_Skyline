@@ -29,25 +29,20 @@ function App() {
       );
     }
   };
-  const [authenticate, setAuthenticate] = useState(false);
+  const [authenticate, setAuthenticate] = useState(true);
   const { isLoggedIn } = useContext(Contexts);
 
   useEffect(() => {
     setAuthenticate(isLoggedIn);
   }, [isLoggedIn]);
   return (
-    <>
-      {!authenticate ? (
-        <Login />
-      ) : (
-        <>
-          <Header onSearchInputChange={handleSearchInputChange} />
-          <Outlet />
-          <Footer />
-        </>
-      )}
-      {/* <NewsCard  searchQuery={searchQuery}/> */}
-    </>
+
+      <>
+        <Header onSearchInputChange={handleSearchInputChange} />
+        <Outlet />
+        <Footer />
+      </>
+
   );
 }
 
