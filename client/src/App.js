@@ -14,17 +14,19 @@ function App() {
   const handleSearchInputChange = (e) => {
     const { pathname } = location;
     setSearchQuery(e.target.value);
-    console.log(e.target.value==="");
-    if(e.target.value===""){
-      setSearchQuery("Indore")
+    console.log(e.target.value === "");
+    if (e.target.value === "") {
+      setSearchQuery("Indore");
     }
 
-
-    
     if (pathname.includes("/home/news")) {
-      navigate(`/home/news/${e.target.value ===""?"indore":e.target.value}`);
+      navigate(
+        `/home/news/${e.target.value === "" ? "indore" : e.target.value}`
+      );
     } else if (pathname.includes("/home/weather")) {
-      navigate(`/home/weather/${e.target.value ===""?"indore":e.target.value}`);
+      navigate(
+        `/home/weather/${e.target.value === "" ? "indore" : e.target.value}`
+      );
     }
   };
   const [authenticate, setAuthenticate] = useState(false);
@@ -35,14 +37,14 @@ function App() {
   }, [isLoggedIn]);
   return (
     <>
-      {authenticate ? (
+      {!authenticate ? (
+        <Login />
+      ) : (
         <>
           <Header onSearchInputChange={handleSearchInputChange} />
           <Outlet />
           <Footer />
         </>
-      ) : (
-        <Login />
       )}
       {/* <NewsCard  searchQuery={searchQuery}/> */}
     </>

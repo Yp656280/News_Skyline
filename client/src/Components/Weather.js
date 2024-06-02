@@ -86,7 +86,7 @@ const Weather = () => {
 
               <ListItemText primary={<strong>Cities</strong>} />
             </ListItemButton>{" "}
-            <ListItemButton
+            {/* <ListItemButton
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -99,7 +99,7 @@ const Weather = () => {
               <img src={mapIcon} alt="" className=" h-12 w-12" />
 
               <ListItemText primary={<strong>Map</strong>} />
-            </ListItemButton>
+            </ListItemButton> */}
           </List>
         </Box>
       </Box>

@@ -61,12 +61,10 @@ export function ContextsProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    console.log("test",weatherSearch)
+    // console.log("test",weatherSearch)
     const loadData = async () => {
-     
       const currentLocation = await GetCurrentLocation();
       // console.log(currentLocation);
-     
 
       const currentWeatherData = await GetCurrentWeather(currentLocation.city);
       setCurrentWeather(currentWeatherData);

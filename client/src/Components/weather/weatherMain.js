@@ -82,8 +82,18 @@ function WeatherMain() {
   // console.log(futureWeather);
   const displayIcon = (conditionCode, hour) => {
     let icon;
-    if (hour > 17) {
-      icon = night_icon;
+    if (hour > 18) {
+      if (conditionCode === 1000) {
+        icon = night_icon;
+      } else {
+        icon = iconMapping[conditionCode];
+      }
+    } else if (hour >= 0 && hour <= 4) {
+      if (conditionCode === 1000) {
+        icon = night_icon;
+      } else {
+        icon = iconMapping[conditionCode];
+      }
     } else {
       icon = iconMapping[conditionCode];
     }

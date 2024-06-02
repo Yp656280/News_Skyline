@@ -82,8 +82,18 @@ const Home = () => {
   };
   const displayIcon = (conditionCode, hour) => {
     let icon;
-    if (hour > 17) {
-      icon = night_icon;
+    if (hour > 18) {
+      if (conditionCode === 1000) {
+        icon = night_icon;
+      } else {
+        icon = iconMapping[conditionCode];
+      }
+    } else if (hour >= 0 && hour <= 4) {
+      if (conditionCode === 1000) {
+        icon = night_icon;
+      } else {
+        icon = iconMapping[conditionCode];
+      }
     } else {
       icon = iconMapping[conditionCode];
     }
@@ -108,7 +118,7 @@ const Home = () => {
   const handleDivClick = (url) => {
     window.open(url, "_blank");
   };
-
+  const now = new Date();
   const itemsPerPage = 5;
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = page * itemsPerPage;
@@ -116,7 +126,6 @@ const Home = () => {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -180,38 +189,55 @@ const Home = () => {
                   <div className="font-semibold">
                     {currentWeather.description}
                   </div>
-                  <div className="flex items-center font-semibold  mb-1 ">
+                  <div className="flex items-center font-semibold  mb-4 ">
                     <img
-                      style={{ height: "50px", marginRight: "25px" }}
-                      src={iconMapping[currentWeather?.conditionCode]}
+                      style={{ height: "45px", marginRight: "25px" }}
+                      src={displayIcon(
+                        futureWeather?.forecast?.forecastday[0].hour[23]
+                          .condition.code,
+                        12
+                      )}
                       alt="Weather Icon"
                     />
-                    <div className="font-semibold">
-                      {currentWeather?.conditionText}{" "}
-                      {currentWeather?.tempCelsius}C
+                    <div className="font-semibold  flex">
+                      <div className=" mr-4 font-semibold">
+                        {" "}
+                        {
+                          futureWeather?.forecast?.forecastday[0].hour[13]
+                            .condition.text
+                        }
+                      </div>
+                      {"      "}
+                      {
+                        futureWeather?.forecast?.forecastday[0].hour[13]
+                          .feelslike_c
+                      }
+                      °C
                     </div>
                   </div>
                   <div className="flex items-center align-items-center font-semibold">
                     <img
-                      style={{ height: "50px", marginRight: "25px" }}
-                      src={
-                        iconMapping[
-                          futureWeather?.forecast?.forecastday[0].hour[23]
-                            .condition.code
-                        ]
-                      }
+                      style={{ height: "45px", marginRight: "25px" }}
+                      src={displayIcon(
+                        futureWeather?.forecast?.forecastday[0].hour[23]
+                          .condition.code,
+                        23
+                      )}
                       alt="Weather Icon"
                     />
-                    <div className="font-semibold">
-                      {
-                        futureWeather?.forecast?.forecastday[0].hour[23]
-                          .condition.text
-                      }{" "}
+                    <div className="flex font-semibold">
+                      <div className=" mr-4 font-semibold">
+                        {" "}
+                        {
+                          futureWeather?.forecast?.forecastday[0].hour[23]
+                            .condition.text
+                        }
+                      </div>{" "}
                       {
                         futureWeather?.forecast?.forecastday[0].hour[23]
                           .feelslike_c
                       }
-                      C
+                      °C
                     </div>
                   </div>
                 </div>
@@ -260,10 +286,11 @@ const Home = () => {
                 <div className="basis-1/2 flex justify-left">
                   <img
                     className="ml-2  mr-7"
-                    style={{ height: "160px" }}
-                    src={iconMapping[currentWeather.conditionCode]}
-                    width={180}
-                    height={180}
+                    style={{ height: "120px" }}
+                    src={displayIcon(
+                      iconMapping[currentWeather.conditionCode],
+                      now.getHours()
+                    )}
                   />
                   <div className="flex flex-col justify-center">
                     <h1 className="text-6xl font-bold">
