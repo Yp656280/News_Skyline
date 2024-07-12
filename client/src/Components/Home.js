@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Box, Paper, Pagination, Skeleton, Divider } from "@mui/material";
 import moment from "moment";
 import WaterDropOutlinedIcon from "@mui/icons-material/WaterDropOutlined";
@@ -26,7 +26,6 @@ import night_icon from "../assets/images/hourly/moon_icon.png";
 import { nanoid } from "nanoid";
 import { Contexts } from "../context/contexts";
 import { Navigate, useNavigate } from "react-router-dom";
-
 
 import { GetNews } from "../Controller/newsController";
 import {
@@ -141,7 +140,6 @@ const Home = () => {
       return;
     }
 
-
     async function fetchData() {
       try {
         setLoading(true);
@@ -171,296 +169,289 @@ const Home = () => {
   console.log(currentWeather, futureWeather);
   return (
     <>
- 
-    <div className="bg-slate-200">
-      <div className="flex justify-evenly flex-wrap mx-4 mb-4">
-        <Box className="basis-3/5">
-          <Paper className="m-4 p-4 " elevation={12}>
-            <div className="flex flex-row justify-between  ">
-              <div className="font-semibold  text-2xl mb-4 ">
-                {loading ? (
-                  <Skeleton variant="text" width={100} />
-                ) : currentWeather.is_day === 1 ? (
-                  "Today's Weather"
-                ) : (
-                  "Tonight's Weather"
-                )}
+      <div className="bg-slate-200">
+        <div className="flex justify-evenly flex-wrap mx-4 mb-4">
+          <Box className="basis-3/5">
+            <Paper className="m-4 p-4 " elevation={12}>
+              <div className="flex flex-row justify-between  ">
+                <div className="font-semibold  text-2xl mb-4 ">
+                  {loading ? (
+                    <Skeleton variant="text" width={100} />
+                  ) : currentWeather.is_day === 1 ? (
+                    "Today's Weather"
+                  ) : (
+                    "Tonight's Weather"
+                  )}
+                </div>
+                <div className="font-semibold">
+                  {loading ? (
+                    <Skeleton variant="text" width={100} />
+                  ) : (
+                    currentDate
+                  )}
+                </div>
               </div>
-              <div className="font-semibold">
+              <Divider />
+              <div>
                 {loading ? (
-                  <Skeleton variant="text" width={100} />
+                  <>
+                    <Skeleton variant="text" width="30%" height={50} />
+                    <Skeleton variant="text" width="30%" height={50} />
+                  </>
                 ) : (
-                  currentDate
-                )}
-              </div>
-            </div>
-            <Divider />
-            <div>
-              {loading ? (
-                <>
-                  <Skeleton variant="text" width="30%" height={50} />
-                  <Skeleton variant="text" width="30%" height={50} />
-                </>
-              ) : (
-                <div className="">
-                  <div className="font-semibold">
-                    {currentWeather.description}
-                  </div>
-                  <div className="flex items-center font-semibold  mb-4 ">
-                    <img
-                      style={{ height: "45px", marginRight: "25px" }}
-                      src={displayIcon(
-                        futureWeather?.forecast?.forecastday[0].hour[23]
-                          .condition.code,
-                        12
-                      )}
-                      alt="Weather Icon"
-                    />
-                    <div className="font-semibold  flex">
-                      <div className=" mr-4 font-semibold">
-                        {" "}
+                  <div className="">
+                    <div className="font-semibold">
+                      {currentWeather.description}
+                    </div>
+                    <div className="flex items-center font-semibold  mb-4 ">
+                      <img
+                        style={{ height: "45px", marginRight: "25px" }}
+                        src={displayIcon(
+                          futureWeather?.forecast?.forecastday[0].hour[23]
+                            .condition.code,
+                          12
+                        )}
+                        alt="Weather Icon"
+                      />
+                      <div className="font-semibold  flex">
+                        <div className=" mr-4 font-semibold">
+                          {" "}
+                          {
+                            futureWeather?.forecast?.forecastday[0].hour[13]
+                              .condition.text
+                          }
+                        </div>
+                        {"      "}
                         {
                           futureWeather?.forecast?.forecastday[0].hour[13]
-                            .condition.text
+                            .feelslike_c
                         }
+                        °C
                       </div>
-                      {"      "}
-                      {
-                        futureWeather?.forecast?.forecastday[0].hour[13]
-                          .feelslike_c
-                      }
-                      °C
                     </div>
-                  </div>
-                  <div className="flex items-center align-items-center font-semibold">
-                    <img
-                      style={{ height: "45px", marginRight: "25px" }}
-                      src={displayIcon(
-                        futureWeather?.forecast?.forecastday[0].hour[23]
-                          .condition.code,
-                        23
-                      )}
-                      alt="Weather Icon"
-                    />
-                    <div className="flex font-semibold">
-                      <div className=" mr-4 font-semibold">
-                        {" "}
+                    <div className="flex items-center align-items-center font-semibold">
+                      <img
+                        style={{ height: "45px", marginRight: "25px" }}
+                        src={displayIcon(
+                          futureWeather?.forecast?.forecastday[0].hour[23]
+                            .condition.code,
+                          23
+                        )}
+                        alt="Weather Icon"
+                      />
+                      <div className="flex font-semibold">
+                        <div className=" mr-4 font-semibold">
+                          {" "}
+                          {
+                            futureWeather?.forecast?.forecastday[0].hour[23]
+                              .condition.text
+                          }
+                        </div>{" "}
                         {
                           futureWeather?.forecast?.forecastday[0].hour[23]
-                            .condition.text
+                            .feelslike_c
                         }
-                      </div>{" "}
-                      {
-                        futureWeather?.forecast?.forecastday[0].hour[23]
-                          .feelslike_c
-                      }
-                      °C
+                        °C
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-          </Paper>
-          {loading ? (
-            <Paper
-              className="m-4 p-4 "
-              // sx={{ borderRadius: "120px" }}
-              elevation={12}
-            >
-              <div className="flex flex-row justify-between">
-                <div>Current Weather</div>
-                <div>{/* Time */}</div>
-              </div>
-              <div className="border-t-2 border-gray-200"></div>
-              <div className="flex flex-row items-center">
-                <div className="basis-1/2 flex justify-left">
-                  <Skeleton
-                    variant="rectangular"
-                    width={140}
-                    height={140}
-                    className="mr-4 mt-2"
-                  />
-                  <div className="flex flex-col justify-center">
-                    <Skeleton variant="text" width={100} height={100} />
-                    <Skeleton variant="text" width={100} />
-                  </div>
-                </div>
-                <div className="divide-y divide-blue-200 flex flex-col basis-1/2 p-4">
-                  <Skeleton variant="text" width={400} />
-                  <Skeleton variant="text" width={400} />
-                  <Skeleton variant="text" width={400} />
-                </div>
+                )}
               </div>
             </Paper>
-          ) : (
-            <Paper className="m-4 p-4 font-semibold" elevation={12}>
-              <div className="flex flex-row justify-between  ">
-                <div className="font-semibold text-2xl"> Current Weather</div>
-                <div>{/* Time */}</div>
-              </div>
-              <div className=" border-t-2 border-gray-200"></div>
-              <div className="flex flex-row items-center">
-                <div className="basis-1/2 flex justify-left">
-                  <img
-                    className="ml-2  mr-7"
-                    style={{ height: "120px" }}
-                    src={displayIcon(
-                      iconMapping[currentWeather.conditionCode],
-                      now.getHours()
-                    )}
-                  />
-                  <div className="flex flex-col justify-center">
-                    <h1 className="text-6xl font-bold">
-                      {currentWeather.tempCelsius}°C
-                    </h1>
-                    <h4 className="font-semibold">
-                      RealFeels {currentWeather.feelslike_celsius}C{" "}
-                    </h4>
+            {loading ? (
+              <Paper
+                className="m-4 p-4 "
+                // sx={{ borderRadius: "120px" }}
+                elevation={12}
+              >
+                <div className="flex flex-row justify-between">
+                  <div>Current Weather</div>
+                  <div>{/* Time */}</div>
+                </div>
+                <div className="border-t-2 border-gray-200"></div>
+                <div className="flex flex-row items-center">
+                  <div className="basis-1/2 flex justify-left">
+                    <Skeleton
+                      variant="rectangular"
+                      width={140}
+                      height={140}
+                      className="mr-4 mt-2"
+                    />
+                    <div className="flex flex-col justify-center">
+                      <Skeleton variant="text" width={100} height={100} />
+                      <Skeleton variant="text" width={100} />
+                    </div>
+                  </div>
+                  <div className="divide-y divide-blue-200 flex flex-col basis-1/2 p-4">
+                    <Skeleton variant="text" width={400} />
+                    <Skeleton variant="text" width={400} />
+                    <Skeleton variant="text" width={400} />
                   </div>
                 </div>
-                <div className="divide-y divide-blue-200 flex font-semibold flex-col basis-1/2 p-4">
-                  <div className="flex justify-between">
-                    <div className="font-semibold">Wind</div>
-                    <div className="font-semibold">
-                      {currentWeather.wind_direction} {currentWeather.wind_mph}{" "}
-                      mph
+              </Paper>
+            ) : (
+              <Paper className="m-4 p-4 font-semibold" elevation={12}>
+                <div className="flex flex-row justify-between  ">
+                  <div className="font-semibold text-2xl"> Current Weather</div>
+                  <div>{/* Time */}</div>
+                </div>
+                <div className=" border-t-2 border-gray-200"></div>
+                <div className="flex flex-row items-center">
+                  <div className="basis-1/2 flex justify-left">
+                    <img
+                      className="ml-2  mr-7"
+                      style={{ height: "120px" }}
+                      src={displayIcon(
+                        iconMapping[currentWeather.conditionCode],
+                        now.getHours()
+                      )}
+                    />
+                    <div className="flex flex-col justify-center">
+                      <h1 className="text-6xl font-bold">
+                        {currentWeather.tempCelsius}°C
+                      </h1>
+                      <h4 className="font-semibold">
+                        RealFeels {currentWeather.feelslike_celsius}C{" "}
+                      </h4>
                     </div>
                   </div>
-                  <div className="flex pt-4 justify-between">
-                    <div className="font-semibold">Wind gusts</div>
-                    <div className="font-semibold">
-                      {currentWeather.gust_mph} mph
+                  <div className="divide-y divide-blue-200 flex font-semibold flex-col basis-1/2 p-4">
+                    <div className="flex justify-between">
+                      <div className="font-semibold">Wind</div>
+                      <div className="font-semibold">
+                        {currentWeather.wind_direction}{" "}
+                        {currentWeather.wind_mph} mph
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex pt-4 justify-between">
-                    <div className="font-semibold">Visibility</div>
-                    <div className="font-semibold">
-                      {currentWeather.visibilityKilometers} KM
+                    <div className="flex pt-4 justify-between">
+                      <div className="font-semibold">Wind gusts</div>
+                      <div className="font-semibold">
+                        {currentWeather.gust_mph} mph
+                      </div>
+                    </div>
+                    <div className="flex pt-4 justify-between">
+                      <div className="font-semibold">Visibility</div>
+                      <div className="font-semibold">
+                        {currentWeather.visibilityKilometers} KM
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Paper>
-          )}
-          {loading ? (
-            <Paper
-              elevation={12}
-              className="m-4 p-4 overflow-x-scroll "
-              // sx={{ borderRadius: "12px" }}
-              style={{ width: "60vw" }}
-            >
-              <div>Hourly Weather</div>
-              <div className="flex">
-                {[...Array(24)].map((_, index) => (
-                  <div className="whitespace-nowrap p-4" key={index}>
-                    <Skeleton variant="text" width={50} />
-                    <Skeleton variant="rectangular" width={100} height={100} />
-                    <Skeleton variant="text" width={50} />
-                    <Skeleton variant="text" width={50} />
-                  </div>
-                ))}
-              </div>
-            </Paper>
-          ) : (
-            <Paper
-              elevation={12}
-              className="m-4 p-4 overflow-x-scroll"
-              style={{
-                width: "60vw",
-                scrollbarWidth: "none",
-
-                msOverflowStyle: "none",
-              }}
-            >
-              <div className=" font-semibold  text-2xl">Hourly Weather</div>
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "79%",
-                  display: "flex",
-                  overflow: "scroll",
-                  padding: "10px",
+              </Paper>
+            )}
+            {loading ? (
+              <Paper
+                elevation={12}
+                className="m-4 p-4 overflow-x-scroll "
+                // sx={{ borderRadius: "12px" }}
+                style={{ width: "60vw" }}
+              >
+                <div>Hourly Weather</div>
+                <div className="flex">
+                  {[...Array(24)].map((_, index) => (
+                    <div className="whitespace-nowrap p-4" key={index}>
+                      <Skeleton variant="text" width={50} />
+                      <Skeleton
+                        variant="rectangular"
+                        width={100}
+                        height={100}
+                      />
+                      <Skeleton variant="text" width={50} />
+                      <Skeleton variant="text" width={50} />
+                    </div>
+                  ))}
+                </div>
+              </Paper>
+            ) : (
+              <Paper
+                elevation={12}
+                className="m-4 p-4 overflow-x-scroll"
+                style={{
+                  width: "60vw",
                   scrollbarWidth: "none",
-                  // border: "solid black 1px",
+
                   msOverflowStyle: "none",
                 }}
               >
-                {futureWeather?.forecast?.forecastday[0].hour.map(
-                  (hours, index) => (
-                    <div
-                      className="whitespace-nowrap p-4"
-                      style={{
-                        height: "92%",
-                        minWidth: "100px",
-                        // border: "solid black 1px",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        fontWeight: "500",
-                        fontSize: "2.5vh",
-                        boxShadow:
-                          "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
-                        backgroundColor: "white",
-                        marginRight: "10px",
-                        marginTop: "12px",
-                        borderRadius: "15px",
-                      }}
-                      key={nanoid()}
-                    >
-                      <h2 style={{ fontSize: "2.5vh" }}>
-                        {parseInt(hours.time.substring(11, 13)) > 12
-                          ? `${parseInt(hours.time.substring(11, 13)) - 12} pm`
-                          : `${hours.time.substring(11, 13) - 0} am`}
-                      </h2>
-                      <img
-                        src={displayIcon(
-                          hours.condition.code,
-                          hours.time.substring(11, 13)
-                        )}
-                        className="aspect-square"
+                <div className=" font-semibold  text-2xl">Hourly Weather</div>
+                <Box
+                  sx={{
+                    width: "100%",
+                    height: "79%",
+                    display: "flex",
+                    overflow: "scroll",
+                    padding: "10px",
+                    scrollbarWidth: "none",
+                    // border: "solid black 1px",
+                    msOverflowStyle: "none",
+                  }}
+                >
+                  {futureWeather?.forecast?.forecastday[0].hour.map(
+                    (hours, index) => (
+                      <div
+                        className="whitespace-nowrap p-4"
                         style={{
-                          height: "40%",
-                          width: "62%",
-                          margin: "10px",
-                          // objectFit: "cover", // Add this to ensure both height and width increase
+                          height: "92%",
+                          minWidth: "100px",
+                          // border: "solid black 1px",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          fontWeight: "500",
+                          fontSize: "2.5vh",
+                          boxShadow:
+                            "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
+                          backgroundColor: "white",
+                          marginRight: "10px",
+                          marginTop: "12px",
+                          borderRadius: "15px",
                         }}
-                      />
-                      <h1>{hours?.temp_c}°C</h1>
-                    </div>
-                  )
-                )}
-              </Box>
-            </Paper>
-          )}
-          {loading ? (
-            <Paper className="m-4 p-4" elevation={12}>
-              <div className="flex flex-row justify-between">
-                <div>3-days weather forecast</div>
-              </div>
-              <div className="flex flex-col justify-center">
-                {[...Array(7)].map((_, index) => (
-                  <div
-                    key={index}
-                    className="flex-1 border-t-2 border-gray-200 flex pt-2 items-center"
-                  >
-                    <div className="left flex basis-2/5 justify-around">
-                      <div>
-                        <Skeleton variant="text" width={50} />
-                        <Skeleton variant="text" width={50} />
-                      </div>
-                      <div className="flex">
-                        <Skeleton
-                          variant="rectangular"
-                          width={50}
-                          height={50}
+                        key={nanoid()}
+                      >
+                        <h2 style={{ fontSize: "2.5vh" }}>
+                          {parseInt(hours.time.substring(11, 13)) > 12
+                            ? `${
+                                parseInt(hours.time.substring(11, 13)) - 12
+                              } pm`
+                            : `${hours.time.substring(11, 13) - 0} am`}
+                        </h2>
+                        <img
+                          src={displayIcon(
+                            hours.condition.code,
+                            hours.time.substring(11, 13)
+                          )}
+                          className="aspect-square"
+                          style={{
+                            height: "40%",
+                            width: "62%",
+                            margin: "10px",
+                            // objectFit: "cover", // Add this to ensure both height and width increase
+                          }}
                         />
-                        <Skeleton variant="text" width={50} />
+                        <h1>{hours?.temp_c}°C</h1>
                       </div>
-                    </div>
-                    <div className="right flex basis-3/5 justify-between px-4">
-                      <div>
-                        <Skeleton variant="text" width={100} />
+                    )
+                  )}
+                </Box>
+              </Paper>
+            )}
+            {loading ? (
+              <Paper className="m-4 p-4" elevation={12}>
+                <div className="flex flex-row justify-between">
+                  <div>3-days weather forecast</div>
+                </div>
+                <div className="flex flex-col justify-center">
+                  {[...Array(7)].map((_, index) => (
+                    <div
+                      key={index}
+                      className="flex-1 border-t-2 border-gray-200 flex pt-2 items-center"
+                    >
+                      <div className="left flex basis-2/5 justify-around">
+                        <div>
+                          <Skeleton variant="text" width={50} />
+                          <Skeleton variant="text" width={50} />
+                        </div>
                         <div className="flex">
                           <Skeleton
                             variant="rectangular"
@@ -470,124 +461,138 @@ const Home = () => {
                           <Skeleton variant="text" width={50} />
                         </div>
                       </div>
-                      <div>
-                        <Skeleton variant="text" width={50} />
-                        <Skeleton variant="text" width={50} />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Paper>
-          ) : (
-            <Paper className="m-4 p-4" elevation={12}>
-              <div className="flex flex-row justify-between">
-                <div className=" font-semibold">3-days Weather forecast</div>
-              </div>
-              <div className="flex flex-col justify-center">
-                {" "}
-                {/* Apply flexbox to center align the forecast cards */}
-                {futureWeather &&
-                  futureWeather?.forecast?.forecastday.map((day, index) => (
-                    <div
-                      key={index}
-                      className="flex-1 border-t-2 border-gray-200 flex pt-2 items-center "
-                    >
-                      <div className="left flex basis-3/5 justify-around ">
+                      <div className="right flex basis-3/5 justify-between px-4">
                         <div>
-                          <div className=" font-semibold">
-                            {index === 0
-                              ? "TODAY"
-                              : moment(day.date).format("ddd").toUpperCase()}
-                          </div>
-                          <div className=" font-semibold ml-4">
-                            {moment(day.date).format("DD/MM")}
-                          </div>
-                        </div>
-                        <div
-                          className="flex  "
-                          // style={{ height: "1%" }}
-                        >
-                          <img
-                            src={iconMapping[day.day.condition.code]}
-                            style={{ height: "40px", marginRight: "20px" }}
-                            alt="Weather Icon"
-                          />
-                          <div className="m-auto font-semibold">
-                            {day.day.maxtemp_c}°C
-                          </div>
-                        </div>
-                      </div>
-                      <div className="right flex  basis-2/4 justify-between px-4  ">
-                        <div className=" ">
-                          <div className="flex font-semibold">
-                            <img
-                              style={{ height: "30px", marginRight: "20px" }}
-                              src={displayIcon(day.hour[23].condition.text, 23)}
-                              alt="Weather Icon"
+                          <Skeleton variant="text" width={100} />
+                          <div className="flex">
+                            <Skeleton
+                              variant="rectangular"
+                              width={50}
+                              height={50}
                             />
-                            {day.day.mintemp_c}°C
+                            <Skeleton variant="text" width={50} />
                           </div>
                         </div>
-                        <div className=" font-semibold">
-                          <WaterDropOutlinedIcon />
-                          {day.day.daily_will_it_rain}%
+                        <div>
+                          <Skeleton variant="text" width={50} />
+                          <Skeleton variant="text" width={50} />
                         </div>
                       </div>
                     </div>
                   ))}
-              </div>
-            </Paper>
-          )}
-        </Box>
-        <div className="basis-1/3">
-          <Paper
-            className="m-4 p-4  pt-0 overflow-scroll "
-            style={{
-              scrollbarWidth: "none",
-              maxHeight: "135.8vh",
-              msOverflowStyle: "none",
-            }}
-            elevation={12}
-          >
-            <h1
-              className="sticky font-semibold   text-2xl pt-1  h-12 top-0 bg-white mb-4 "
-              style={{ zIndex: 1, padding: "1rem 1rem" }}
+                </div>
+              </Paper>
+            ) : (
+              <Paper className="m-4 p-4" elevation={12}>
+                <div className="flex flex-row justify-between">
+                  <div className=" font-semibold">3-days Weather forecast</div>
+                </div>
+                <div className="flex flex-col justify-center">
+                  {" "}
+                  {/* Apply flexbox to center align the forecast cards */}
+                  {futureWeather &&
+                    futureWeather?.forecast?.forecastday.map((day, index) => (
+                      <div
+                        key={index}
+                        className="flex-1 border-t-2 border-gray-200 flex pt-2 items-center "
+                      >
+                        <div className="left flex basis-3/5 justify-around ">
+                          <div>
+                            <div className=" font-semibold">
+                              {index === 0
+                                ? "TODAY"
+                                : moment(day.date).format("ddd").toUpperCase()}
+                            </div>
+                            <div className=" font-semibold ml-4">
+                              {moment(day.date).format("DD/MM")}
+                            </div>
+                          </div>
+                          <div
+                            className="flex  "
+                            // style={{ height: "1%" }}
+                          >
+                            <img
+                              src={iconMapping[day.hour[23].condition.code]}
+                              style={{ height: "40px", marginRight: "20px" }}
+                              alt="Weather Icon"
+                            />
+                            <div className="m-auto font-semibold">
+                              {day.day.maxtemp_c}°C
+                            </div>
+                          </div>
+                        </div>
+                        <div className="right flex  basis-2/4 justify-between px-4  ">
+                          <div className=" ">
+                            <div className="flex font-semibold">
+                              <img
+                                style={{ height: "30px", marginRight: "20px" }}
+                                src={displayIcon(
+                                  day.hour[23].condition.text,
+                                  23
+                                )}
+                                alt="Weather Icon"
+                              />
+                              {day.day.mintemp_c}°C
+                            </div>
+                          </div>
+                          <div className=" font-semibold">
+                            <WaterDropOutlinedIcon />
+                            {day.day.daily_will_it_rain}%
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </Paper>
+            )}
+          </Box>
+          <div className="basis-1/3">
+            <Paper
+              className="m-4 p-4  pt-0 overflow-scroll "
+              style={{
+                scrollbarWidth: "none",
+                maxHeight: "135.8vh",
+                msOverflowStyle: "none",
+              }}
+              elevation={12}
             >
-              Top Stories
-            </h1>
+              <h1
+                className="sticky font-semibold   text-2xl pt-1  h-12 top-0 bg-white mb-4 "
+                style={{ zIndex: 1, padding: "1rem 1rem" }}
+              >
+                Top Stories
+              </h1>
 
-            {!loading
-              ? news.map((article, index) => (
-                  <div
-                    key={index}
-                    className="flex py-4 justify-between cursor-pointer"
-                    onClick={() => handleDivClick(article.url)}
-                  >
-                    <h3>{article.title}</h3>
-                    <img
-                      className="h-20 w-20"
-                      src={article.urlToImage ? article.urlToImage : noImg}
-                      alt="Article"
-                    />
-                  </div>
-                ))
-              : Array.from({ length: 10 }, (_, index) => (
-                  <div
-                    key={index}
-                    className="flex  py-6 justify-between cursor-pointer  "
-                  >
-                    <Skeleton variant="text" width="100%" className="mr-4" />
+              {!loading
+                ? news.map((article, index) => (
+                    <div
+                      key={index}
+                      className="flex py-4 justify-between cursor-pointer"
+                      onClick={() => handleDivClick(article.url)}
+                    >
+                      <h3>{article.title}</h3>
+                      <img
+                        className="h-20 w-20"
+                        src={article.urlToImage ? article.urlToImage : noImg}
+                        alt="Article"
+                      />
+                    </div>
+                  ))
+                : Array.from({ length: 10 }, (_, index) => (
+                    <div
+                      key={index}
+                      className="flex  py-6 justify-between cursor-pointer  "
+                    >
+                      <Skeleton variant="text" width="100%" className="mr-4" />
 
-                    <Skeleton variant="rectangular" width={80} height={60} />
-                  </div>
-                ))}
-          </Paper>
+                      <Skeleton variant="rectangular" width={80} height={60} />
+                    </div>
+                  ))}
+            </Paper>
+          </div>
         </div>
       </div>
-    </div>
     </>
-    
   );
 };
 
