@@ -1,11 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Contexts } from "../../context/contexts";
 import { nanoid } from "nanoid";
 import Box from "@mui/material/Box";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import List from "@mui/material/List";
-import sunIcon from "../../assets/images/sunIcon.png";
 import thermometer from "../../assets/images/thermometer.png";
 import wind from "../../assets/images/wind.png";
 import sun from "../../assets/images/sun.png";
@@ -26,6 +21,8 @@ import fog_icon from "../../assets/images/hourly/fog_icon.png";
 import ice_pellets_icon from "../../assets/images/hourly/ice_pellets_icon.png";
 import night_icon from "../../assets/images/hourly/moon_icon.png";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Skeleton } from "@mui/material";
 function WeatherMain() {
   const { weatherSearch } = useParams();
   const iconMapping = {
@@ -76,10 +73,13 @@ function WeatherMain() {
     1282: thunderstorm_icon, // Moderate or heavy snow with thunder
   };
   const currentHour = new Date().getHours();
-  const weatherData = {};
   const x = [1, 2, 3, 4, 5, 6, 7];
-  const { currentWeather, futureWeather } = useContext(Contexts);
-  // console.log(futureWeather);
+  const [currentWeather, setCurrentWeather] = useState("");
+  const [futureWeather, setFutureWeather] = useState("");
+  const [city, setCity] = useState("");
+  const [lat, setLat] = useState("");
+  const [long, setLong] = useState("");
+  const [loading, setLoading] = useState(true);
   const displayIcon = (conditionCode, hour) => {
     let icon;
     if (hour > 18) {
@@ -106,6 +106,50 @@ function WeatherMain() {
       console.log("No icon found for condition code:", conditionCode);
     }
   };
+
+  useEffect(() => {
+    if (!lat && !long) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          setLat(latitude);
+          setLong(longitude);
+        },
+        (error) => {
+          console.log("error in getting location");
+        }
+      );
+    } else if (lat && long && !city) {
+      fetch(`http://localhost:4000/api/weather/getLocation/${lat}/${long}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((data) => data.json())
+        .then((data) => {
+          setCity(JSON.parse(data).features[0].properties.city);
+        });
+    } else if (city) {
+      try {
+        Promise.all([
+          fetch(`http://localhost:4000/api/weather/current/${city}`).then(
+            (response) => response.json()
+          ),
+          fetch(`http://localhost:4000/api/weather/future/${city}`).then(
+            (response) => response.json()
+          ),
+        ]).then(([currentWeatherResponse, futureWeatherResponse]) => {
+          setCurrentWeather(currentWeatherResponse);
+          setFutureWeather(futureWeatherResponse);
+          setLoading(false);
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+  }, [city, lat, long]);
   return (
     <>
       <Box
@@ -139,6 +183,7 @@ function WeatherMain() {
             }}
           />
         </Box> */}
+
         <Box
           sx={{
             height: "30%",
@@ -160,49 +205,74 @@ function WeatherMain() {
               justifyContent: "space-evenly",
             }}
           >
-            <Box
-              sx={{
-                fontSize: "350%",
-                fontWeight: "bold",
-                color: "#202b3bff",
-                marginTop: "",
-              }}
-            >
-              {currentWeather?.locationName}
-            </Box>
-            <Box
-              sx={{
-                fontSize: "100%",
-                fontWeight: "bold",
-                color: "#9399a2ff",
-                marginTop: "-30px",
-              }}
-            >
-              Chance of rain:
-              {futureWeather?.forecast?.forecastday[0].hour[12].chance_of_rain}%
-            </Box>
-            <Box
-              sx={{
-                fontSize: "350%",
-                fontWeight: "bold",
-                color: "#202b3bff",
-                marginTop: "20px",
-              }}
-            >
-              {futureWeather?.current?.temp_c}°
-            </Box>
+            {loading ? (
+              <Skeleton
+                variant="text"
+                animation="wave"
+                height={120}
+                width={200}
+              />
+            ) : (
+              <Box
+                sx={{
+                  fontSize: "350%",
+                  fontWeight: "bold",
+                  color: "#202b3bff",
+                  marginTop: "",
+                  // border: "solid black 1px",
+                }}
+              >
+                {currentWeather?.locationName}
+              </Box>
+            )}
+            {loading ? (
+              <Skeleton animation="wave" height={40} width={170} />
+            ) : (
+              <Box
+                sx={{
+                  fontSize: "100%",
+                  fontWeight: "bold",
+                  color: "#9399a2ff",
+                  marginTop: "-30px",
+                  // border: "solid black 1px",
+                }}
+              >
+                Chance of rain :
+                {` ${futureWeather?.forecast?.forecastday[0]?.day.daily_chance_of_rain}`}
+                %
+              </Box>
+            )}
+            {loading ? (
+              <Skeleton animation="wave" height={120} width={200} />
+            ) : (
+              <Box
+                sx={{
+                  fontSize: "350%",
+                  fontWeight: "bold",
+                  color: "#202b3bff",
+                  marginTop: "20px",
+                  // border: "solid black 1px",
+                }}
+              >
+                {futureWeather?.current?.temp_c}°
+              </Box>
+            )}
           </Box>
-          <Box
-            sx={{
-              // border: "solid black 1px",
-              width: "30%",
-            }}
-          >
-            <img
-              src={displayIcon(currentWeather?.conditionCode, currentHour)}
-              alt=""
-            />
-          </Box>
+          {loading ? (
+            <Skeleton animation="wave" width={220} />
+          ) : (
+            <Box
+              sx={{
+                // border: "solid black 1px",
+                width: "30%",
+              }}
+            >
+              <img
+                src={displayIcon(currentWeather?.conditionCode, currentHour)}
+                alt=""
+              />
+            </Box>
+          )}
         </Box>
         <Box
           sx={{
@@ -214,7 +284,7 @@ function WeatherMain() {
             borderRadius: "25px",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "space-between",
             alignItems: "center",
             padding: "10px",
             paddingRight: "20px",
@@ -234,64 +304,73 @@ function WeatherMain() {
           >
             Today's Forecast
           </Box>
-          <Box
-            sx={{
-              width: "100%",
-              height: "79%",
-              display: "flex",
-              overflow: "scroll",
-              padding: "10px",
-              scrollbarWidth: "none",
-              // border: "solid black 1px",
-              msOverflowStyle: "none",
-            }}
-          >
-            {futureWeather?.forecast?.forecastday[0].hour.map(
-              (hours, index) => (
-                <div
-                  className="whitespace-nowrap p-4"
-                  style={{
-                    height: "92%",
-                    minWidth: "100px",
-                    // border: "solid black 1px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontWeight: "500",
-                    fontSize: "2.5vh",
-                    boxShadow:
-                      "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
-                    backgroundColor: "white",
-                    marginRight: "10px",
-                    marginTop: "12px",
-                    borderRadius: "15px",
-                  }}
-                  key={nanoid()}
-                >
-                  <h2 style={{ fontSize: "2.5vh" }}>
-                    {parseInt(hours.time.substring(11, 13)) > 12
-                      ? `${parseInt(hours.time.substring(11, 13)) - 12} pm`
-                      : `${hours.time.substring(11, 13) - 0} am`}
-                  </h2>
-                  <img
-                    src={displayIcon(
-                      hours.condition.code,
-                      hours.time.substring(11, 13)
-                    )}
-                    className="aspect-square"
+          {loading ? (
+            <Skeleton
+              variant="text"
+              animation="wave"
+              width={800}
+              height={180}
+            />
+          ) : (
+            <Box
+              sx={{
+                width: "100%",
+                height: "79%",
+                display: "flex",
+                overflow: "scroll",
+                padding: "10px",
+                scrollbarWidth: "none",
+                // border: "solid black 1px",
+                msOverflowStyle: "none",
+              }}
+            >
+              {futureWeather?.forecast?.forecastday[0].hour.map(
+                (hours, index) => (
+                  <div
+                    className="whitespace-nowrap p-4"
                     style={{
-                      height: "40%",
-                      width: "62%",
-                      margin: "10px",
-                      // objectFit: "cover", // Add this to ensure both height and width increase
+                      height: "92%",
+                      minWidth: "100px",
+                      // border: "solid black 1px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontWeight: "500",
+                      fontSize: "2.5vh",
+                      boxShadow:
+                        "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
+                      backgroundColor: "white",
+                      marginRight: "10px",
+                      marginTop: "12px",
+                      borderRadius: "15px",
                     }}
-                  />
-                  <h1>{hours?.temp_c}°C</h1>
-                </div>
-              )
-            )}
-          </Box>
+                    key={nanoid()}
+                  >
+                    <h2 style={{ fontSize: "2.5vh" }}>
+                      {parseInt(hours.time.substring(11, 13)) > 12
+                        ? `${parseInt(hours.time.substring(11, 13)) - 12} pm`
+                        : `${hours.time.substring(11, 13) - 0} am`}
+                    </h2>
+                    <img
+                      src={displayIcon(
+                        hours.condition.code,
+                        hours.time.substring(11, 13)
+                      )}
+                      className="aspect-square"
+                      style={{
+                        height: "40%",
+                        width: "62%",
+                        margin: "10px",
+                        // objectFit: "cover", // Add this to ensure both height and width increase
+                      }}
+                    />
+                    <h1>{hours?.temp_c}°C</h1>
+                  </div>
+                )
+              )}
+            </Box>
+          )}
         </Box>
 
         <Box
@@ -398,17 +477,21 @@ function WeatherMain() {
                   />
                   Real Feel
                 </Box>
-                <Box
-                  sx={{
-                    fontSize: "40px",
-                    // border: "solid red 1px",
-                    paddingLeft: "15%",
-                    fontWeight: "500",
-                    paddingTop: "10px",
-                  }}
-                >
-                  {futureWeather?.current?.feelslike_c}°c
-                </Box>
+                {loading ? (
+                  <Skeleton animation="wave" width={80} height={60} />
+                ) : (
+                  <Box
+                    sx={{
+                      fontSize: "40px",
+                      // border: "solid red 1px",
+                      paddingLeft: "15%",
+                      fontWeight: "500",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    {futureWeather?.current?.feelslike_c}°c
+                  </Box>
+                )}
               </Box>
               {/* chances of rain */}
               <Box
@@ -445,22 +528,26 @@ function WeatherMain() {
                   />
                   Chances of Rain
                 </Box>
-                <Box
-                  sx={{
-                    fontSize: "30px",
-                    // border: "solid red 1px",
-                    fontSize: "40px",
-                    paddingLeft: "15%",
-                    fontWeight: "500",
-                    paddingTop: "10px",
-                  }}
-                >
-                  {
-                    futureWeather?.forecast?.forecastday[0].hour[12]
-                      .chance_of_rain
-                  }
-                  %
-                </Box>{" "}
+                {loading ? (
+                  <Skeleton animation="wave" width={80} height={50} />
+                ) : (
+                  <Box
+                    sx={{
+                      fontSize: "30px",
+                      // border: "solid red 1px",
+                      fontSize: "40px",
+                      paddingLeft: "15%",
+                      fontWeight: "500",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    {
+                      futureWeather?.forecast?.forecastday[0].hour[12]
+                        .chance_of_rain
+                    }
+                    %
+                  </Box>
+                )}{" "}
               </Box>
             </Box>
             <Box
@@ -508,18 +595,22 @@ function WeatherMain() {
                   />
                   Wind Speed
                 </Box>
-                <Box
-                  sx={{
-                    fontSize: "30px",
-                    // border: "solid red 1px",
-                    fontSize: "40px",
-                    paddingLeft: "15%",
-                    fontWeight: "500",
-                    paddingTop: "10px",
-                  }}
-                >
-                  {futureWeather?.current?.wind_kph} kp/h
-                </Box>{" "}
+                {loading ? (
+                  <Skeleton animation="wave" width={80} height={50} />
+                ) : (
+                  <Box
+                    sx={{
+                      fontSize: "30px",
+                      // border: "solid red 1px",
+                      fontSize: "40px",
+                      paddingLeft: "15%",
+                      fontWeight: "500",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    {futureWeather?.current?.wind_kph} kp/h
+                  </Box>
+                )}{" "}
               </Box>
               <Box
                 sx={{
@@ -555,20 +646,24 @@ function WeatherMain() {
                   />
                   UV index
                 </Box>
-                <Box
-                  sx={{
-                    fontSize: "30px",
-                    // border: "solid red 1px",
-                    fontSize: "40px",
-                    paddingLeft: "15%",
-                    fontWeight: "500",
-                    paddingTop: "10px",
-                  }}
-                >
-                  {currentHour > 18 && currentHour < 6
-                    ? "0"
-                    : `${futureWeather?.current?.uv}`}
-                </Box>{" "}
+                {loading ? (
+                  <Skeleton width={80} height={50} animation="wave" />
+                ) : (
+                  <Box
+                    sx={{
+                      fontSize: "30px",
+                      // border: "solid red 1px",
+                      fontSize: "40px",
+                      paddingLeft: "15%",
+                      fontWeight: "500",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    {currentHour > 18 && currentHour < 6
+                      ? "0"
+                      : `${futureWeather?.current?.uv}`}
+                  </Box>
+                )}{" "}
               </Box>
             </Box>
           </Box>
@@ -630,7 +725,9 @@ function WeatherMain() {
             }}
           >
             {futureWeather?.forecast?.forecastday[0]?.hour?.map((cur) => {
-              return (
+              return loading ? (
+                <Skeleton animation="wave" width={400} height={100} />
+              ) : (
                 <Box
                   sx={{
                     // border: "solid orange 1px",

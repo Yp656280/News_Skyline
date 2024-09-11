@@ -5,13 +5,12 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
 // Create a transporter using the SMTP configuration
-
-const mailSender = async (req, res, email, otp) => {
+const mailSender = (email, otp) => {
   const transporter = nodemailer.createTransport({
     service: "Gmail", // Change to your email service provider
     auth: {
       user: "yp65624@gmail.com", // Your email address
-      pass: "wdnu lkto cbqy gcru", //Your email password or an application-specific password
+      pass: "wdnu lkto cbqy gcru", // Your email password or an application-specific password
     },
   });
 
@@ -21,24 +20,42 @@ const mailSender = async (req, res, email, otp) => {
     to: email, // Recipient's email address
     subject: "Test Email", // Email subject
     text: otp,
-    html: `<P>${otp}</P>`, // Email plain text body
+    html: `<p>${otp}</p>`, // Email HTML body
   };
 
-  // Send the email
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log("maaa", email, error);
-      return "404";
-    } else {
-      console.log("Sending the Mail");
-      return "200";
-    }
+  // Send the email and return a promise
+  return new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error sending email:", email, error);
+        reject(error);
+      } else {
+        // console.log("Email sent successfully:", info.response);
+        resolve(info.response);
+      }
+    });
   });
 };
 
+//send otp// send otp
+const sendOtp = asyncHandler(async (req, res) => {
+  const { otp, email } = req.body;
+  if (!otp || !email) {
+    res.status(400); // Changed to 400 for bad request
+    throw new Error("All fields are mandatory");
+  }
+  try {
+    const response = await mailSender(email, otp);
+    if (response) {
+      res.status(200).send({ message: "OTP sent successfully" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to send email" });
+  }
+});
 //Register User
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, phone, otp } = req.body;
+  const { username, email, password, phone } = req.body;
   if (!username || !email || !password || !phone) {
     res.status(404);
     throw new Error("all feilds are mandatory");
@@ -48,12 +65,6 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     console.log("400");
     throw new Error("user already registerd");
-  }
-  try {
-    await mailSender(req, res, email, otp);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to send email" });
-    return;
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -142,4 +153,5 @@ module.exports = {
   currentUser,
   mailSender,
   updateUserIsAlive,
+  sendOtp,
 };

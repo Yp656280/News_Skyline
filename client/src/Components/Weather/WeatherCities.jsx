@@ -1,19 +1,5 @@
 import React, { useState, useContext } from "react";
 import Box from "@mui/material/Box";
-import { Contexts } from "../../context/contexts";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import List from "@mui/material/List";
-import {
-  GetCurrentWeather,
-  GetFutureWeather,
-  GetCurrentLocation,
-} from "../../Controller/weatherController";
-import sunIcon from "../../assets/images/sunIcon.png";
-import thermometer from "../../assets/images/thermometer.png";
-import wind from "../../assets/images/wind.png";
-import sun from "../../assets/images/sun.png";
-import watrerDroplet from "../../assets/images/water droplet.png";
 import { nanoid } from "nanoid";
 import sunny_icon from "../../assets/images/hourly/sunny_icon.png";
 import partly_cloudy_icon from "../../assets/images/hourly/partly_cloudy_icon.png";
@@ -30,6 +16,8 @@ import blizzard_icon from "../../assets/images/hourly/blizzard_icon.png";
 import fog_icon from "../../assets/images/hourly/fog_icon.png";
 import ice_pellets_icon from "../../assets/images/hourly/ice_pellets_icon.png";
 import night_icon from "../../assets/images/hourly/moon_icon.png";
+import { setActiveWeather, setAllWeather } from "../../store/weatherSlice";
+import { useDispatch, useSelector } from "react-redux";
 function WeatherCities() {
   const iconMapping = {
     1000: sunny_icon,
@@ -104,24 +92,27 @@ function WeatherCities() {
       console.log("No icon found for condition code:", conditionCode);
     }
   };
-  const x = [0, 1, 2, 3, 4, 5, 6, 7, 8];
   const [selectedDiv, setSelectedDiv] = useState("");
   const [search, setSearch] = useState("");
-  const { allWeather, setAllWeather, activeWeather, setActiveWeather } =
-    useContext(Contexts);
+
+  const dispatch = useDispatch();
+  const activeWeather = useSelector((state) => state.weather.activeWeather);
+  const allWeather = useSelector((state) => state.weather.allWeather);
+
   const [active, setActive] = useState(false);
   const searchWeather = (e, city) => {
     e.preventDefault();
     setSearch("");
-    const data = GetFutureWeather(city).then((data) => {
-      if (allWeather) setAllWeather([...allWeather, data]);
-      else setAllWeather([data]);
-    });
+    const data = fetch(`http://localhost:4000/api/weather/future/${city}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch(setAllWeather({ data: data }));
+      });
   };
   const handleClick = (index, cur) => {
     setSelectedDiv(index);
     console.log(cur);
-    setActiveWeather(cur);
+    dispatch(setActiveWeather({ data: cur }));
     setActive(true);
   };
   return (
@@ -175,7 +166,9 @@ function WeatherCities() {
             // border: "solid red 1px",
             width: "98%",
             overflow: "scroll",
-            minHeight: "50%",
+            minHeight: "45vh",
+            maxHeight: "45vh",
+
             padding: "20px",
             paddingBottom: "10px",
             marginBottom: "20px",
@@ -189,6 +182,8 @@ function WeatherCities() {
             // justifyContent: "center",
             // alignItems: "center",
             borderRadius: "25px",
+            boxShadow:
+              "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
           }}
         >
           {allWeather.map((cur, index) => {
@@ -207,12 +202,13 @@ function WeatherCities() {
                   paddingRight: "6%",
                   backgroundColor:
                     selectedDiv === index ? "white" : "rgb(234, 236, 239)",
-                  border: selectedDiv === index ? "solid blue 1px" : "none",
+                  // border: selectedDiv === index ? "solid blue 1px" : "none",
                   boxShadow:
                     "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
                   marginBottom: "20px",
                 }}
                 onClick={() => handleClick(index, cur)}
+                key={cur?.location?.name}
               >
                 <Box
                   sx={{
@@ -424,10 +420,10 @@ function WeatherCities() {
               paddingLeft: "5%",
             }}
           >
-            <Box sx={{ fontSize: "300%", fontWeight: "500" }}>
+            <Box sx={{ fontSize: "250%", fontWeight: "500" }}>
               {activeWeather?.location?.name}
             </Box>
-            <Box sx={{ marginTop: "-10%" }}>
+            <Box sx={{ marginTop: "-5%" }}>
               chance of rain:{" "}
               {
                 activeWeather?.forecast?.forecastday[0]?.hour[12]
@@ -435,7 +431,7 @@ function WeatherCities() {
               }
               %
             </Box>
-            <Box sx={{ fontSize: "400%", fontWeight: "500" }}>
+            <Box sx={{ fontSize: "300%", fontWeight: "500" }}>
               {activeWeather?.current?.temp_c}°c
             </Box>
           </Box>

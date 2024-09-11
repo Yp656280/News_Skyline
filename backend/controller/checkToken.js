@@ -6,7 +6,8 @@ const nodemailer = require("nodemailer");
 
 const checkToken = asyncHandler(async (req, res) => {
   let { token } = req.body;
-  token = token.slice(1, -1);
+  // console.log(token);
+  // token = token.slice(1, -1);
   if (token) {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) {

@@ -2,39 +2,24 @@ import React, { useState, useEffect, useContext } from "react";
 import { Box, Paper, Pagination, Skeleton, Divider } from "@mui/material";
 import moment from "moment";
 import WaterDropOutlinedIcon from "@mui/icons-material/WaterDropOutlined";
-import noImg from "../assets/No_Image_Available.jpg";
-import sunIcon from "../assets/images/sunIcon.png";
-import thermometer from "../assets/images/thermometer.png";
-import wind from "../assets/images/wind.png";
-import sun from "../assets/images/sun.png";
-import watrerDroplet from "../assets/images/water droplet.png";
-import sunny_icon from "../assets/images/hourly/sunny_icon.png";
-import partly_cloudy_icon from "../assets/images/hourly/partly_cloudy_icon.png";
-import cloudy_icon from "../assets/images/hourly/cloudy_icon.png";
-import overcast_icon from "../assets/images/hourly/overcast_icon.png";
-import mist_icon from "../assets/images/hourly/mist_icon.png";
-import rain_icon from "../assets/images/hourly/rain_icon.png";
-import snow_icon from "../assets/images/hourly/snow_icon.png";
-import sleet_icon from "../assets/images/hourly/sleet_icon.png";
-import drizzle_icon from "../assets/images/hourly/drizzle_icon.png";
-import thunderstorm_icon from "../assets/images/hourly/thunderstorm_icon.png";
-import blowing_snow_icon from "../assets/images/hourly/blowing_snow_icon.png";
-import blizzard_icon from "../assets/images/hourly/blizzard_icon.png";
-import fog_icon from "../assets/images/hourly/fog_icon.png";
-import ice_pellets_icon from "../assets/images/hourly/ice_pellets_icon.png";
-import night_icon from "../assets/images/hourly/moon_icon.png";
+import noImg from "../../assets/No_Image_Available.jpg";
+import sunny_icon from "../../assets/images/hourly/sunny_icon.png";
+import partly_cloudy_icon from "../../assets/images/hourly/partly_cloudy_icon.png";
+import cloudy_icon from "../../assets/images/hourly/cloudy_icon.png";
+import overcast_icon from "../../assets/images/hourly/overcast_icon.png";
+import mist_icon from "../../assets/images/hourly/mist_icon.png";
+import rain_icon from "../../assets/images/hourly/rain_icon.png";
+import snow_icon from "../../assets/images/hourly/snow_icon.png";
+import sleet_icon from "../../assets/images/hourly/sleet_icon.png";
+import drizzle_icon from "../../assets/images/hourly/drizzle_icon.png";
+import thunderstorm_icon from "../../assets/images/hourly/thunderstorm_icon.png";
+import blowing_snow_icon from "../../assets/images/hourly/blowing_snow_icon.png";
+import blizzard_icon from "../../assets/images/hourly/blizzard_icon.png";
+import fog_icon from "../../assets/images/hourly/fog_icon.png";
+import ice_pellets_icon from "../../assets/images/hourly/ice_pellets_icon.png";
+import night_icon from "../../assets/images/hourly/moon_icon.png";
 import { nanoid } from "nanoid";
-import { Contexts } from "../context/contexts";
-import { Navigate, useNavigate } from "react-router-dom";
-
-import { GetNews } from "../Controller/newsController";
-import {
-  GetCurrentWeather,
-  GetFutureWeather,
-  GetCurrentLocation,
-} from "../Controller/weatherController";
-import Login from "./Login";
-
+import { useDispatch } from "react-redux";
 const Home = () => {
   const iconMapping = {
     1000: sunny_icon,
@@ -101,72 +86,80 @@ const Home = () => {
       icon = iconMapping[conditionCode];
     }
     if (icon) {
-      // Display icon
       return icon;
-      // Here you can set the source of an image tag or do whatever you need to display the icon
     } else {
-      // Handle unknown condition code
       console.log("No icon found for condition code:", conditionCode);
     }
   };
   const [news, setNews] = useState([]);
   const [currentWeather, setCurrentWeather] = useState({});
   const [futureWeather, setFutureWeather] = useState({});
-  const [location, setLocation] = useState("");
-  const [isDayOrNight, setIsDayOrNight] = useState("");
   const [currentDate, setCurrentDate] = useState("");
-  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [authenticate, setAuthenticate] = useState(true);
-  const { isLoggedIn } = useContext(Contexts);
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
+  const [city, setCity] = useState("");
+  const [lat, setLat] = useState("");
+  const [long, setLong] = useState("");
+  const now = new Date();
+  const dispatch = useDispatch();
   const handleDivClick = (url) => {
     window.open(url, "_blank");
   };
-  const now = new Date();
-  const itemsPerPage = 5;
-  const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = page * itemsPerPage;
-
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
-
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    async function fetchData() {
+    if (!lat && !long) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          setLat(latitude);
+          setLong(longitude);
+        },
+        (error) => {
+          console.log("error in getting location");
+        }
+      );
+    } else if (lat && long && !city) {
+      fetch(`http://localhost:4000/api/weather/getLocation/${lat}/${long}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((data) => data.json())
+        .then((data) => {
+          sessionStorage.setItem(
+            "city",
+            JSON.parse(data).features[0].properties.city
+          );
+          setCity(JSON.parse(data).features[0].properties.city);
+        });
+    } else if (city) {
       try {
         setLoading(true);
-        const newsData = await GetNews("indore");
-
-        setNews(newsData.articles);
-
-        const currentWeatherData = await GetCurrentWeather("indore");
-        setCurrentWeather(currentWeatherData);
-
-        const futureWeatherData = await GetFutureWeather("indore");
-        setFutureWeather(futureWeatherData);
-
-        const currentLocation = await GetCurrentLocation();
-        setLocation(currentLocation);
+        Promise.all([
+          fetch(`http://localhost:4000/api/news/${city}`).then((response) =>
+            response.json()
+          ),
+          fetch(`http://localhost:4000/api/weather/current/${city}`).then(
+            (response) => response.json()
+          ),
+          fetch(`http://localhost:4000/api/weather/future/${city}`).then(
+            (response) => response.json()
+          ),
+        ]).then(
+          ([newsResponse, currentWeatherResponse, futureWeatherResponse]) => {
+            setNews(newsResponse.articles);
+            setCurrentWeather(currentWeatherResponse);
+            setFutureWeather(futureWeatherResponse);
+            setLoading(false);
+          }
+        );
 
         setCurrentDate(moment().format("ddd, MMM DD"));
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
       }
     }
-
-    fetchData();
-  }, [token]);
-  console.log(currentWeather, futureWeather);
+  }, [city, lat, long]);
   return (
     <>
       <div className="bg-slate-200">
@@ -207,7 +200,7 @@ const Home = () => {
                       <img
                         style={{ height: "45px", marginRight: "25px" }}
                         src={displayIcon(
-                          futureWeather?.forecast?.forecastday[0].hour[23]
+                          futureWeather?.forecast?.forecastday[0].hour[12]
                             .condition.code,
                           12
                         )}
@@ -217,13 +210,13 @@ const Home = () => {
                         <div className=" mr-4 font-semibold">
                           {" "}
                           {
-                            futureWeather?.forecast?.forecastday[0].hour[13]
+                            futureWeather?.forecast?.forecastday[0].hour[12]
                               .condition.text
                           }
                         </div>
                         {"      "}
                         {
-                          futureWeather?.forecast?.forecastday[0].hour[13]
+                          futureWeather?.forecast?.forecastday[0].hour[12]
                             .feelslike_c
                         }
                         °C
@@ -302,7 +295,7 @@ const Home = () => {
                       className="ml-2  mr-7"
                       style={{ height: "120px" }}
                       src={displayIcon(
-                        iconMapping[currentWeather.conditionCode],
+                        currentWeather.conditionCode,
                         now.getHours()
                       )}
                     />
@@ -512,7 +505,7 @@ const Home = () => {
                             // style={{ height: "1%" }}
                           >
                             <img
-                              src={iconMapping[day.hour[23].condition.code]}
+                              src={iconMapping[day.day.condition.code]}
                               style={{ height: "40px", marginRight: "20px" }}
                               alt="Weather Icon"
                             />
@@ -527,7 +520,7 @@ const Home = () => {
                               <img
                                 style={{ height: "30px", marginRight: "20px" }}
                                 src={displayIcon(
-                                  day.hour[23].condition.text,
+                                  day.hour[23].condition.code,
                                   23
                                 )}
                                 alt="Weather Icon"
@@ -537,7 +530,7 @@ const Home = () => {
                           </div>
                           <div className=" font-semibold">
                             <WaterDropOutlinedIcon />
-                            {day.day.daily_will_it_rain}%
+                            {day?.day?.daily_chance_of_rain}%
                           </div>
                         </div>
                       </div>
@@ -557,7 +550,7 @@ const Home = () => {
               elevation={12}
             >
               <h1
-                className="sticky font-semibold   text-2xl pt-1  h-12 top-0 bg-white mb-4 "
+                className="sticky font-semibold   text-2xl pt-1     h-16 top-0 bg-white  "
                 style={{ zIndex: 1, padding: "1rem 1rem" }}
               >
                 Top Stories

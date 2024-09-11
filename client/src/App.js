@@ -1,16 +1,47 @@
-import { useContext, useEffect, useState } from "react";
-import Header from "./Components/Header";
-import { Outlet } from "react-router";
-import Footer from "./Components/Footer";
-import { useNavigate, useLocation } from "react-router";
-import "./App.css";
-import { Contexts } from "./context/contexts";
-import Login from "./Components/Login";
+import { Outlet, useLocation } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { logout } from "./store/authSlice";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 function App() {
-  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const [authentication, setAuthentication] = useState(false);
+  const status = sessionStorage?.getItem("status");
+  const token = sessionStorage?.getItem("token");
+  const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    if (status) {
+      try {
+        const response = fetch(`http://localhost:4000/api/users/checkToken`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: token }),
+        })
+          .then((data) => data.json())
+          .then((data) => {
+            if (data) {
+              setAuthentication(data);
+            } else {
+              sessionStorage.clear();
+              dispatch(logout());
+              navigate("/login");
+            }
+          });
+      } catch (error) {
+        console.log("error in checking token");
+      }
+    } else {
+      dispatch(logout());
+      navigate("/login");
+    }
+  }, [location]);
   const handleSearchInputChange = (e) => {
     const { pathname } = location;
     setSearchQuery(e.target.value);
@@ -29,20 +60,17 @@ function App() {
       );
     }
   };
-  const [authenticate, setAuthenticate] = useState(true);
-  const { isLoggedIn } = useContext(Contexts);
-
-  useEffect(() => {
-    setAuthenticate(isLoggedIn);
-  }, [isLoggedIn]);
-  return (
-
-      <>
+  return authentication ? (
+    <>
+      <div className="flex flex-col justify-between w-full h-screen">
+        {" "}
         <Header onSearchInputChange={handleSearchInputChange} />
         <Outlet />
         <Footer />
-      </>
-
+      </div>
+    </>
+  ) : (
+    <></>
   );
 }
 

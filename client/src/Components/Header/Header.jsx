@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   styled,
   alpha,
@@ -17,18 +17,21 @@ import InputBase from "@mui/material/InputBase";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
-import logo from "../assets/new Logo.png";
-import logout from "../assets/power-on.png";
+import logo from "../../assets/new Logo.png";
+import logout from "../../assets/power-on.png";
 import { useNavigate } from "react-router";
-
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { logout as logoutStore } from "../../store/authSlice";
+import { useDispatch } from "react-redux";
 const theme = createTheme({
   palette: {
-    mode: "dark", // Set theme mode to dark
+    mode: "dark",
   },
 });
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  backgroundColor: "#000000", // Set background color to black
+  backgroundColor: "#000000",
 }));
 
 const Search = styled("div")(({ theme }) => ({
@@ -74,13 +77,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const pages = [
   { name: "Home", link: "/home" },
-  { name: "News", link: "/home/news/indore" },
-  { name: "Weather", link: "/home/weather/indore" },
+  {
+    name: "News",
+    link: `/home/news/${sessionStorage.getItem("city") || "indore"}`,
+  },
+  {
+    name: "Weather",
+    link: `/home/weather/${sessionStorage.getItem("city") || "indore"}`,
+  },
 ];
+
 const navigationStyle = {
   width: "9%",
   backgroundColor: "transparent",
-  // border: "solid white 1px",
   display: "flex",
   justifyContent: "right",
   alignItems: "center",
@@ -103,21 +112,18 @@ const logoutStyle = {
   opacity: 0,
   transition: "opacity 0.45s",
   WebkitTransition: "opacity 0.35s",
-  // border: "solid white 1px",
 };
 
 const buttonStyle = {
   textDecoration: "none",
   float: "right",
   padding: "12px",
-  // margin: "15px",
   color: "white",
   width: "50px",
   backgroundColor: "transparent",
   transition: "width 0.35s",
   WebkitTransition: "width 0.35s",
   overflow: "hidden",
-  // border: "solid white 1px",
   maxHeight: "50px",
 };
 
@@ -128,8 +134,15 @@ const buttonHoverStyle = {
 const logoutHoverStyle = {
   opacity: 0.9,
 };
+
 function Header({ onSearchInputChange }) {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const url = useLocation();
+  const [location, setLocation] = useState();
+  useEffect(() => {
+    setLocation(url);
+  }, [url]);
+
+  const [anchorElNav, setAnchorElNav] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -138,13 +151,14 @@ function Header({ onSearchInputChange }) {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogout = () => {
+    dispatch(logoutStore());
+    sessionStorage.clear();
     navigate("/login");
-    localStorage.clear();
   };
 
-  const navigate = useNavigate();
   return (
     <ThemeProvider theme={theme}>
       <StyledAppBar position="static">
@@ -153,8 +167,7 @@ function Header({ onSearchInputChange }) {
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="/home"
+              component="div" // Changed from "a" to "div"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -165,11 +178,13 @@ function Header({ onSearchInputChange }) {
                 textDecoration: "none",
               }}
             >
-              <img
-                src={logo}
-                alt="logo"
-                style={{ height: "4rem", width: "10rem" }}
-              />
+              <Link to="/home">
+                <img
+                  src={logo}
+                  alt="logo"
+                  style={{ height: "4rem", width: "10rem" }}
+                />
+              </Link>
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -218,26 +233,29 @@ function Header({ onSearchInputChange }) {
 
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
-                <Button
+                <Link
+                  to={`${page.link}`}
                   key={page.name}
                   sx={{ my: 2, color: "white", display: "block" }}
-                  component="a"
-                  href={page.link}
+                  className="px-4"
                 >
                   {page.name}
-                </Button>
+                </Link>
               ))}
             </Box>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-                onChange={onSearchInputChange}
-              />
-            </Search>
+            {location?.pathname === "/home" ||
+            location?.pathname.includes("/home/weather") ? null : (
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ "aria-label": "search" }}
+                  onChange={onSearchInputChange}
+                />
+              </Search>
+            )}
             <div style={navigationStyle}>
               <a
                 className="button"

@@ -104,7 +104,7 @@ const getCurrentWeatherFromCity = asyncHandler(async function (req, res) {
 //fetching the current data from lat and lng
 const getCurrentWeatherFromLatLng = async (req, res) => {
   const weatherApi = await fetch(
-    `https://api.weatherapi.com/v1/current.json?key=7ad97723551b4dc6b21111018240106&q=${req.params.lat},${req.params.lng}`
+    `https://api.weatherapi.com/v1/current.json?key=994f16fde2644d26a0874326240903&q=${req.params.lat},${req.params.lng}`
   );
   if (!weatherApi.ok) {
     res.status(404);
@@ -133,10 +133,12 @@ const getFutureWeatherFromCity = asyncHandler(async (req, res) => {
 //fetching the city of current user
 const getLocation = async (req, res) => {
   try {
-    const locationApi = await fetch("https://ipapi.co/city/");
+    const locationApi = await fetch(
+      `https://api.geoapify.com/v1/geocode/reverse?lat=${req.params.lat}&lon=${req.params.lon}&apiKey=6fc162fd1ff645d5adb40e3da7d4f66c`
+    );
 
     const data = await locationApi.text();
-    res.status(201).json({ city: data });
+    res.status(201).json(data);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

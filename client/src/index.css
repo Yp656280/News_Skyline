@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  font-family: "Inter", system-ui;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}

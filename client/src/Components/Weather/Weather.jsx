@@ -3,37 +3,24 @@ import Box from "@mui/material/Box";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
-import weatherIcon from "../assets/images/weatherIcon2.png";
-import menuIcon from "../assets/images/menuIcon.png";
-import mapIcon from "../assets/images/mapIcon.png";
-import WeatherMain from "./weather/weatherMain";
-import WeatherCities from "./weather/weatherCities";
-import WeatherMap from "./weather/weatherMap";
-import { Navigate,useNavigate } from "react-router-dom";
-const token = localStorage.getItem("token");
+import weatherIcon from "../../assets/images/weatherIcon2.png";
+import menuIcon from "../../assets/images/menuIcon.png";
+import WeatherMain from "./WeatherMain";
+import WeatherCities from "./WeatherCities";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Weather = () => {
   const [weatherData, setWeatherData] = useState("");
   const navigate = useNavigate();
-  const [display, setDisplay] = useState(
-    <WeatherMain weatherData={weatherData} />
-  );
+  const [display, setDisplay] = useState(<WeatherMain />);
 
-  useEffect(()=>{
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-  },[token])
   const weatherHome = () => {
-    setDisplay(<WeatherMain weatherData={weatherData} />);
+    setDisplay(<WeatherMain />);
   };
   const cities = () => {
-    setDisplay(<WeatherCities weatherData={weatherData} />);
+    setDisplay(<WeatherCities />);
   };
-  const map = () => {
-    setDisplay(<WeatherMap weatherData={weatherData} />);
-  };
+
   return (
     <Box sx={{ width: "98.5vw", height: "120vh", display: "flex" }}>
       <Box
