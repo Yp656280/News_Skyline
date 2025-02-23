@@ -66,6 +66,7 @@ function WeatherCities() {
     1279: thunderstorm_icon, // Merged patchy light snow with thunder
     1282: thunderstorm_icon, // Moderate or heavy snow with thunder
   };
+  const baseUrl = `https://news-skyline-backend.vercel.app`;
   const displayIcon = (conditionCode, hour) => {
     let icon;
     if (hour > 18) {
@@ -103,7 +104,7 @@ function WeatherCities() {
   const searchWeather = (e, city) => {
     e.preventDefault();
     setSearch("");
-    const data = fetch(`http://localhost:4000/api/weather/future/${city}`)
+    const data = fetch(`${baseUrl}/api/weather/future/${city}`)
       .then((res) => res.json())
       .then((data) => {
         dispatch(setAllWeather({ data: data }));

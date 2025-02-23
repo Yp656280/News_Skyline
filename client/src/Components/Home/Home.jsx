@@ -21,6 +21,7 @@ import night_icon from "../../assets/images/hourly/moon_icon.png";
 import { nanoid } from "nanoid";
 import { useDispatch } from "react-redux";
 const Home = () => {
+  const baseUrl = `https://news-skyline-backend.vercel.app`;
   const iconMapping = {
     1000: sunny_icon,
     1003: partly_cloudy_icon,
@@ -118,7 +119,7 @@ const Home = () => {
         }
       );
     } else if (lat && long && !city) {
-      fetch(`http://localhost:4000/api/weather/getLocation/${lat}/${long}`, {
+      fetch(`${baseUrl}/api/weather/getLocation/${lat}/${long}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -136,14 +137,14 @@ const Home = () => {
       try {
         setLoading(true);
         Promise.all([
-          fetch(`http://localhost:4000/api/news/${city}`).then((response) =>
+          fetch(`${baseUrl}/api/news/${city}`).then((response) =>
             response.json()
           ),
-          fetch(`http://localhost:4000/api/weather/current/${city}`).then(
-            (response) => response.json()
+          fetch(`${baseUrl}/api/weather/current/${city}`).then((response) =>
+            response.json()
           ),
-          fetch(`http://localhost:4000/api/weather/future/${city}`).then(
-            (response) => response.json()
+          fetch(`${baseUrl}/api/weather/future/${city}`).then((response) =>
+            response.json()
           ),
         ]).then(
           ([newsResponse, currentWeatherResponse, futureWeatherResponse]) => {

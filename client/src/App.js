@@ -13,11 +13,11 @@ function App() {
   const status = sessionStorage?.getItem("status");
   const token = sessionStorage?.getItem("token");
   const [searchQuery, setSearchQuery] = useState("");
-
+  const baseUrl = `https://news-skyline-backend.vercel.app`;
   useEffect(() => {
     if (status) {
       try {
-        const response = fetch(`http://localhost:4000/api/users/checkToken`, {
+        const response = fetch(`${baseUrl}/api/users/checkToken`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

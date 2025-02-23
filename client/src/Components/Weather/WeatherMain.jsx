@@ -72,6 +72,8 @@ function WeatherMain() {
     1279: thunderstorm_icon, // Merged patchy light snow with thunder
     1282: thunderstorm_icon, // Moderate or heavy snow with thunder
   };
+
+  const baseUrl = `https://news-skyline-backend.vercel.app`;
   const currentHour = new Date().getHours();
   const x = [1, 2, 3, 4, 5, 6, 7];
   const [currentWeather, setCurrentWeather] = useState("");
@@ -121,7 +123,7 @@ function WeatherMain() {
         }
       );
     } else if (lat && long && !city) {
-      fetch(`http://localhost:4000/api/weather/getLocation/${lat}/${long}`, {
+      fetch(`${baseUrl}/api/weather/getLocation/${lat}/${long}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -134,11 +136,11 @@ function WeatherMain() {
     } else if (city) {
       try {
         Promise.all([
-          fetch(`http://localhost:4000/api/weather/current/${city}`).then(
-            (response) => response.json()
+          fetch(`${baseUrl}/api/weather/current/${city}`).then((response) =>
+            response.json()
           ),
-          fetch(`http://localhost:4000/api/weather/future/${city}`).then(
-            (response) => response.json()
+          fetch(`${baseUrl}/api/weather/future/${city}`).then((response) =>
+            response.json()
           ),
         ]).then(([currentWeatherResponse, futureWeatherResponse]) => {
           setCurrentWeather(currentWeatherResponse);

@@ -7,6 +7,7 @@ import Button from "../Button";
 import Otp from "../otp/Otp";
 
 function SignUp() {
+  const baseUrl = `https://news-skyline-backend.vercel.app`;
   const [otp, setOtp] = useState(Math.floor(Math.random() * 9000) + 1000);
 
   const { register, handleSubmit, resetField } = useForm();
@@ -15,7 +16,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const signup = async (data) => {
     setError("");
-    const response = await fetch(`http://localhost:4000/api/users/register`, {
+    const response = await fetch(`${baseUrl}/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +42,7 @@ function SignUp() {
       setOtpVisibility(true);
       setEmail(data.email);
       try {
-        fetch("http://localhost:4000/api/users/sendOtp", {
+        fetch(`${baseUrl}/api/users/sendOtp`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

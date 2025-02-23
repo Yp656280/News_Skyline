@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/new Logo.png";
 
 const Footer = () => {
+  const baseUrl = `https://news-skyline-backend.vercel.app`;
   return (
     <footer className="bg-white  shadow dark:bg-gray-900 mt-auto     ">
       <div className="w-full max-w-screen-xl mx-auto p-4 ">
         <div className="sm:flex sm:items-center sm:justify-between ">
           <Link
-            to="http://localhost:3000/home"
+            to={`${baseUrl}/home`}
             className="flex items-center   space-x-3 rtl:space-x-reverse"
           >
             <img src={logo} className="h-20 w-60" alt="Flowbite Logo" />

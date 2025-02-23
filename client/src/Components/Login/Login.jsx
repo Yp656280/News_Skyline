@@ -11,6 +11,7 @@ import {
   logout as authLogout,
 } from "../../store/authSlice";
 function Login() {
+  const baseUrl = `https://news-skyline-backend.vercel.app`;
   const { register, handleSubmit, resetField } = useForm();
   const [error, setError] = useState(" ");
   const [token, setToken] = useState("");
@@ -18,7 +19,7 @@ function Login() {
   const navigate = useNavigate();
   useEffect(() => {
     if (token) {
-      fetch(`http://localhost:4000/api/users/checkToken`, {
+      fetch(`${baseUrl}/api/users/checkToken`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +44,7 @@ function Login() {
   const login = async (data) => {
     setError("");
     try {
-      const response = await fetch("http://localhost:4000/api/users/login", {
+      const response = await fetch(`${baseUrl}/api/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

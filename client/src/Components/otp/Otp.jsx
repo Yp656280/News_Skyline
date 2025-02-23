@@ -6,6 +6,7 @@ import Button from "../Button";
 import { useNavigate } from "react-router-dom";
 
 function Otp({ otp, setOtpVisibility, setOtp, email }) {
+  const baseUrl = `https://news-skyline-backend.vercel.app`;
   const { register, handleSubmit, resetField } = useForm();
   const [error, setError] = useState(" ");
   const navigate = useNavigate();
@@ -13,16 +14,13 @@ function Otp({ otp, setOtpVisibility, setOtp, email }) {
     setError("");
     if (data.otp === `${otp}`) {
       try {
-        const response = await fetch(
-          "http://localhost:4000/api/users/setAlive",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email: email }), // Provide the email parameter here
-          }
-        );
+        const response = await fetch(`${baseUrl}/api/users/setAlive`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: email }), // Provide the email parameter here
+        });
         if (!response.ok) {
           console.log("error in set alive");
         } else {

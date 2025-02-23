@@ -11,6 +11,7 @@ import noImg from "../../assets/No_Image_Available.jpg";
 import LeftHeader from "./NewsLeftComponent";
 
 export default function News() {
+  const baseUrl = `https://news-skyline-backend.vercel.app`;
   const [news, setNews] = useState([]);
   const { newsSearch } = useParams();
   const [loading, setLoading] = useState(true);
@@ -48,8 +49,8 @@ export default function News() {
 
   async function getNews(target) {
     try {
-      let result = fetch(`http://localhost:4000/api/news/${target}`).then(
-        (data) => data.json()
+      let result = fetch(`${baseUrl}/api/news/${target}`).then((data) =>
+        data.json()
       );
 
       return result;
