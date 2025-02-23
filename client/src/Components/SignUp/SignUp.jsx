@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/logo.jpeg";
 import { useForm } from "react-hook-form";
 import Button from "../Button";
-import Otp from "../Otp/Otp";
+import Otp from "../otp/Otp";
 
 function SignUp() {
   const [otp, setOtp] = useState(Math.floor(Math.random() * 9000) + 1000);
