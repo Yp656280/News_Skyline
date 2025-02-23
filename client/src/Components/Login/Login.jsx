@@ -57,7 +57,6 @@ function Login() {
       if (!response.ok) {
         setError("check your email and password!");
         resetField("password");
-        console.log("error in login");
       } else {
         const data = await response.json();
         setToken(data.acessToken);

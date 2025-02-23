@@ -67,13 +67,10 @@ export default function News() {
   useEffect(() => {
     setLoading(true);
     async function fetchData(target) {
-      console.log("news search", newsSearch);
       let data;
       if (newsSearch.length > 0) {
-        console.log("hii");
         data = await getNews(newsSearch);
       } else {
-        console.log("hii 2");
         data = await getNews("Indore");
       }
       const filteredArticles = data.articles.filter(

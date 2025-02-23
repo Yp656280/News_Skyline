@@ -90,7 +90,6 @@ function WeatherCities() {
       // Here you can set the source of an image tag or do whatever you need to display the icon
     } else {
       // Handle unknown condition code
-      console.log("No icon found for condition code:", conditionCode);
     }
   };
   const [selectedDiv, setSelectedDiv] = useState("");
@@ -112,7 +111,6 @@ function WeatherCities() {
   };
   const handleClick = (index, cur) => {
     setSelectedDiv(index);
-    console.log(cur);
     dispatch(setActiveWeather({ data: cur }));
     setActive(true);
   };
@@ -188,7 +186,6 @@ function WeatherCities() {
           }}
         >
           {allWeather.map((cur, index) => {
-            // console.log(cur);
             return (
               <Box
                 sx={{
@@ -492,7 +489,6 @@ function WeatherCities() {
                 alignItems: "center",
               }}
             >
-              {console.log()}
               <Box sx={{ fontWeight: "500", fontSize: "80%" }}>6Am</Box>
               <Box sx={{ height: "33.33%" }}>
                 <img

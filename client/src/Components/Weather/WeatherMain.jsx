@@ -105,7 +105,6 @@ function WeatherMain() {
       // Here you can set the source of an image tag or do whatever you need to display the icon
     } else {
       // Handle unknown condition code
-      console.log("No icon found for condition code:", conditionCode);
     }
   };
 

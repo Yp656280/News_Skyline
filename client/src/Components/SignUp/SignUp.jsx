@@ -32,7 +32,6 @@ function SignUp() {
       setError("Enter valid details!");
       resetField("email");
       resetField("password");
-      console.log("error in signup");
     } else {
       setError("");
       resetField("email");

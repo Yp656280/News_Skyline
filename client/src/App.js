@@ -45,7 +45,6 @@ function App() {
   const handleSearchInputChange = (e) => {
     const { pathname } = location;
     setSearchQuery(e.target.value);
-    console.log(e.target.value === "");
     if (e.target.value === "") {
       setSearchQuery("Indore");
     }
