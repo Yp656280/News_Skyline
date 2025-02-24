@@ -8,7 +8,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import App from "./App";
-import Login from "./components/Login/Login";
+import Login from "./components/LoginFolder/Login";
 import SignUp from "./components/SignUp/SignUp";
 import store from "./store/store.js";
 import { Provider } from "react-redux";
